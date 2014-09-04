@@ -1,9 +1,0 @@
-C:\dev\blind_dates\Viscera\Viscera.Test.Unit\bin\Debug\Viscera.Test.Unit.dll
-C:\dev\blind_dates\Viscera\Viscera.Test.Unit\bin\Debug\Viscera.Test.Unit.pdb
-C:\dev\blind_dates\Viscera\Viscera.Test.Unit\bin\Debug\Viscera.dll
-C:\dev\blind_dates\Viscera\Viscera.Test.Unit\bin\Debug\Viscera.pdb
-C:\dev\blind_dates\Viscera\Viscera.Test.Unit\obj\Debug\Viscera.Test.Unit.csprojResolveAssemblyReference.cache
-C:\dev\blind_dates\Viscera\Viscera.Test.Unit\obj\Debug\Viscera.Test.Unit.dll
-C:\dev\blind_dates\Viscera\Viscera.Test.Unit\obj\Debug\Viscera.Test.Unit.pdb
-C:\dev\blind_dates\Viscera\Viscera.Test.Unit\bin\Debug\Viscera.Test.Machinery.dll
-C:\dev\blind_dates\Viscera\Viscera.Test.Unit\bin\Debug\Viscera.Test.Machinery.pdb

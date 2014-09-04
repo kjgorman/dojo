@@ -1,0 +1,7 @@
+C:\dev\blind_dates\Viscera\Viscera.Test.Machinery\bin\Debug\Viscera.Test.Machinery.dll
+C:\dev\blind_dates\Viscera\Viscera.Test.Machinery\bin\Debug\Viscera.Test.Machinery.pdb
+C:\dev\blind_dates\Viscera\Viscera.Test.Machinery\bin\Debug\Viscera.dll
+C:\dev\blind_dates\Viscera\Viscera.Test.Machinery\bin\Debug\Viscera.pdb
+C:\dev\blind_dates\Viscera\Viscera.Test.Machinery\obj\Debug\Viscera.Test.Machinery.csprojResolveAssemblyReference.cache
+C:\dev\blind_dates\Viscera\Viscera.Test.Machinery\obj\Debug\Viscera.Test.Machinery.dll
+C:\dev\blind_dates\Viscera\Viscera.Test.Machinery\obj\Debug\Viscera.Test.Machinery.pdb

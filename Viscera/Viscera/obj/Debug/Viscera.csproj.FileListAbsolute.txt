@@ -1,0 +1,6 @@
+C:\dev\blind_dates\Viscera\Viscera\bin\Debug\Viscera.dll.config
+C:\dev\blind_dates\Viscera\Viscera\bin\Debug\Viscera.dll
+C:\dev\blind_dates\Viscera\Viscera\bin\Debug\Viscera.pdb
+C:\dev\blind_dates\Viscera\Viscera\obj\Debug\Viscera.csprojResolveAssemblyReference.cache
+C:\dev\blind_dates\Viscera\Viscera\obj\Debug\Viscera.dll
+C:\dev\blind_dates\Viscera\Viscera\obj\Debug\Viscera.pdb

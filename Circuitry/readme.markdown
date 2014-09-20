@@ -13,13 +13,11 @@ this is going to be (hopefully) more test driven from the beginning. Instead of 
 out literal tests there's just going to be a list of things to do, in a rough order of
 relevance.
 
-- Add an AND gate
+- Add an AND gate (use wikipedia's truth tables to drive your tests)
 - Add a change handler that detects a wire flipping its signal using c#s `event` registration
 - Add a probe that records the signal on a wire sequentially
 - Add an OR gate
 - Add an XOR gate
-- Make the gates have a delay in processing time using Task.Delay(), and make operations
-  combining them asynchronous using the 4.5 async/await keywords
 - Implement a half adder
 - Implement a full adder
 - Implement an abstraction from in-built shorts to an ordered sequence of wires

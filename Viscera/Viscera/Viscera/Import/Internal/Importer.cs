@@ -9,12 +9,10 @@ namespace Viscera.Import.Internal
     internal class Importer : IImporter
     {
         private readonly Converter _converter;
-        private readonly Ports.Orders _orders;
 
-        internal Importer(Converter converter, Ports.Orders orders)
+        internal Importer(Converter converter)
         {
             _converter = converter;
-            _orders = orders;
         }
 
         public IEnumerable<Paint.Paint> Import(Stream stream)
@@ -30,7 +28,7 @@ namespace Viscera.Import.Internal
             var numberGreen = paints.Count(p => p.IsGreen());
             var numberBlue = paints.Count(p => p.IsBlue());
 
-            _orders.Record(new OrderStatistics(numberRed, numberGreen, numberBlue));
+            new OrderService().Record(new OrderStatistics(numberRed, numberGreen, numberBlue));
 
             return paints;
         }

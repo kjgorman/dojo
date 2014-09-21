@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Viscera.Test.Machinery.Assertions;
 using Viscera.Test.Machinery.Extensions;
-using Viscera.Test.Machinery.Stubs;
 
 namespace Viscera.Test.Unit.Import
 {
@@ -15,7 +14,7 @@ namespace Viscera.Test.Unit.Import
         {
             using (var stream = "10,0,100,100,0".AsStream())
             {
-                var paints = UseCases.Import.Cmyk(stream, new InMemoryOrderService());
+                var paints = UseCases.Import.Cmyk(stream);
 
                 Assert.AreEqual(1, paints.Count());
                 Assert.AreEqual(10, paints.First().VolumeInLitres);
@@ -28,7 +27,7 @@ namespace Viscera.Test.Unit.Import
         {
             using (var stream = "10,101,0,0,0".AsStream())
             {
-                var err = Assertions.Throws<Exception>(() => UseCases.Import.Cmyk(stream, new InMemoryOrderService()));
+                var err = Assertions.Throws<Exception>(() => UseCases.Import.Cmyk(stream));
 
                 Assert.IsTrue(err.Message.Contains("CMYK values must be <= 100"));
             }
@@ -39,7 +38,7 @@ namespace Viscera.Test.Unit.Import
         {
             using (var stream = "10,-1,0,0,0".AsStream())
             {
-                var err = Assertions.Throws<Exception>(() => UseCases.Import.Cmyk(stream, new InMemoryOrderService()));
+                var err = Assertions.Throws<Exception>(() => UseCases.Import.Cmyk(stream));
 
                 Assert.IsTrue(err.Message.Contains("CMYK values must be >= 0"));
             }
@@ -50,7 +49,7 @@ namespace Viscera.Test.Unit.Import
         {
             using (var stream = "10, 0, 0, 0".AsStream())
             {
-                Assertions.Throws<Exception>(() => UseCases.Import.Cmyk(stream, new InMemoryOrderService()));
+                Assertions.Throws<Exception>(() => UseCases.Import.Cmyk(stream));
             }
         }
 
@@ -64,7 +63,7 @@ namespace Viscera.Test.Unit.Import
 
             using (var stream = palette.AsStream())
             {
-                var paints = UseCases.Import.Cmyk(stream, new InMemoryOrderService()).ToList();
+                var paints = UseCases.Import.Cmyk(stream).ToList();
 
                 Assert.AreEqual(2, paints.Count());
                 Assert.IsTrue(paints.First().IsRed());
@@ -79,7 +78,7 @@ namespace Viscera.Test.Unit.Import
             {
                 //var orders = 
 
-                UseCases.Import.Cmyk(stream, new InMemoryOrderService());
+                UseCases.Import.Cmyk(stream);
                 /*
                  * for some `orders`...
                 Assert.AreEqual(1, orders.RedCount());
@@ -96,7 +95,7 @@ namespace Viscera.Test.Unit.Import
             {
                 try
                 {
-                    var paints = UseCases.Import.Cmyk(stream, new InMemoryOrderService());
+                    var paints = UseCases.Import.Cmyk(stream);
 
                     Assert.IsTrue(paints.First().IsRed());
                 }

@@ -5,9 +5,9 @@ namespace Viscera.Import.Internal
 {
     internal class ImporterFactory
     {
-        internal IImporter Create(ImportType type, Stream inputStream, Ports.Orders orders)
+        internal IImporter Create(ImportType type, Stream inputStream)
         {
-            return new Importer(new Rgba(), orders);
+            return new Importer(new Rgba());
         }
     }
 }

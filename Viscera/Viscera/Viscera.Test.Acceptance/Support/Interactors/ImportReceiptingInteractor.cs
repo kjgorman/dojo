@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Viscera.Test.Machinery.Extensions;
-using Viscera.Test.Machinery.Stubs;
 
 namespace Viscera.Test.Acceptance.Support.Interactors
 {
@@ -11,7 +10,7 @@ namespace Viscera.Test.Acceptance.Support.Interactors
 
         public void Import(string csv)
         {
-            _state = UseCases.Import.Rgba(csv.AsStream(), new InMemoryOrderService());
+            _state = UseCases.Import.Rgba(csv.AsStream());
         }
 
         public string Receipt()

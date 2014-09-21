@@ -7,14 +7,14 @@ namespace Viscera.UseCases
 {
     public static class Import
     {
-        public static IEnumerable<Paint.Paint> Rgba(Stream inputStream, Ports.Orders orders)
+        public static IEnumerable<Paint.Paint> Rgba(Stream inputStream)
         {
-            return new ImporterFactory().Create(ImportType.Rgba, inputStream, orders).Import(inputStream);
+            return new ImporterFactory().Create(ImportType.Rgba, inputStream).Import(inputStream);
         }
 
-        public static IEnumerable<Paint.Paint> Cmyk(Stream inputStream, Ports.Orders orders)
+        public static IEnumerable<Paint.Paint> Cmyk(Stream inputStream)
         {
-            return new ImporterFactory().Create(ImportType.Cmyk, inputStream, orders).Import(inputStream);
+            return new ImporterFactory().Create(ImportType.Cmyk, inputStream).Import(inputStream);
         }
     }
 }

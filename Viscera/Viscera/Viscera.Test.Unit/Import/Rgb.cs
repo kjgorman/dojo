@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Viscera.Test.Machinery.Assertions;
 using Viscera.Test.Machinery.Extensions;
-using Viscera.Test.Machinery.Stubs;
 
 namespace Viscera.Test.Unit.Import
 {
@@ -15,7 +14,7 @@ namespace Viscera.Test.Unit.Import
         {
             using (var stream = "10,255,0,0".AsStream())
             {
-                var paints = UseCases.Import.Rgba(stream, new InMemoryOrderService());
+                var paints = UseCases.Import.Rgba(stream);
 
                 Assert.AreEqual(1, paints.Count());
                 Assert.AreEqual(10, paints.First().VolumeInLitres);
@@ -28,7 +27,7 @@ namespace Viscera.Test.Unit.Import
         {
             using (var stream = "10,256,0,0".AsStream())
             {
-                var err = Assertions.Throws<Exception>(() => UseCases.Import.Rgba(stream, new InMemoryOrderService()));
+                var err = Assertions.Throws<Exception>(() => UseCases.Import.Rgba(stream));
 
                 Assert.IsTrue(err.Message.Contains("greater than 255"));
             }
@@ -39,7 +38,7 @@ namespace Viscera.Test.Unit.Import
         {
             using (var stream = "10,-1,0,0".AsStream())
             {
-                var err = Assertions.Throws<Exception>(() => UseCases.Import.Rgba(stream, new InMemoryOrderService()));
+                var err = Assertions.Throws<Exception>(() => UseCases.Import.Rgba(stream));
 
                 Assert.IsTrue(err.Message.Contains("less than 0"));
             }
@@ -50,7 +49,7 @@ namespace Viscera.Test.Unit.Import
         {
             using (var stream = "0,0,0,0".AsStream())
             {
-                var err = Assertions.Throws<Exception>(() => UseCases.Import.Rgba(stream, new InMemoryOrderService()));
+                var err = Assertions.Throws<Exception>(() => UseCases.Import.Rgba(stream));
 
                 Assert.IsTrue(err.Message.Contains("Volume must be greater than zero"), "Expected the error <{0}> to contain <Volume must be greater than zero>", err.Message);
             }
@@ -66,7 +65,7 @@ namespace Viscera.Test.Unit.Import
 
             using (var stream = palette.AsStream())
             {
-                var paints = UseCases.Import.Rgba(stream, new InMemoryOrderService()).ToList();
+                var paints = UseCases.Import.Rgba(stream).ToList();
 
                 Assert.AreEqual(2, paints.Count());
                 Assert.IsTrue(paints.First().IsRed());
@@ -79,7 +78,7 @@ namespace Viscera.Test.Unit.Import
         {
             using (var stream = "10,255,0,0".AsStream())
             {
-                UseCases.Import.Rgba(stream, new InMemoryOrderService());
+                UseCases.Import.Rgba(stream);
                 /*
                  * for some `orders`...
                 Assert.AreEqual(1, orders.RedCount());
@@ -96,7 +95,7 @@ namespace Viscera.Test.Unit.Import
             {
                 try
                 {
-                    var paints = UseCases.Import.Rgba(stream, new InMemoryOrderService());
+                    var paints = UseCases.Import.Rgba(stream);
 
                     Assert.IsTrue(paints.First().IsRed());
                 }

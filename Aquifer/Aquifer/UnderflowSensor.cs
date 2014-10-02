@@ -1,10 +1,12 @@
-﻿namespace Aquifer
+﻿using System;
+
+namespace Aquifer
 {
     public class UnderflowSensor
     {
         public bool Sense()
         {
-            return false;
+            return new Random().NextDouble() < 0.5;
         }
     }
 }

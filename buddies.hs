@@ -1,12 +1,12 @@
-mport System.Random (randomRIO)
+module Buddies (buddies) where
+
+import System.Environment (getArgs)
+import System.Random (randomRIO)
 import Control.Monad (liftM)
 import Data.Maybe (maybeToList)
 
-snipers :: [String]
-snipers = ["Kieran", "Dean", "Matt", "Tats", "Brent", "Alex", "Ryan", "Ben"]
-
-pairs :: [(String, String)]
-pairs = [(x, y) | x <- snipers, y <- snipers, x /= y]
+pairs :: [String] -> [(String, String)]
+pairs people = [(x, y) | x <- people, y <- people, x /= y]
 
 pick :: [a] -> IO (Maybe a)
 pick [] = return Nothing
@@ -40,5 +40,13 @@ choose' n src pred acc = do
         Nothing -> choose' n src pred acc
     	(Just p) -> choose' (n-1) src pred (p:acc)
 
-buddies :: IO [(String, String)]
-buddies = choose 4 pairs notBuddies
+buddies :: [String] -> IO (Either String [(String, String)])
+buddies s = if length s `mod` 2 /= 0
+            then return . Left $ "Uneven buddies :( someone will need to be a three"
+            else liftM Right $ choose (length s `div` 2) (pairs s) notBuddies
+
+main :: IO ()
+main = do
+  args <- getArgs
+  buds <- buddies args
+  print buds

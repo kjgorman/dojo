@@ -37,14 +37,14 @@
                 {
                     //TODO hmm what will happen when methane is critical so we can't
                     //     run the pump, and the water is rising?
-                    _pump.Extract();
+                    _pump.Extract(SumpResevoir.Instance.Value);
                 }
 
                 if (!methaneCritical && underflowCritical)
                 {
                     //TODO hmm what will happen when the methane is critical and we
                     //     aren't able to stop pumping water out of the system?
-                    _pump.ReleaseBackPressure();
+                    _pump.ReleaseBackPressure(SumpResevoir.Instance.Value);
                 }
 
                 if (methaneCritical || airflowCritical || monoxideCritical)

@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace Aquifer
+﻿namespace Aquifer
 {
     public class MethaneSensor
     {
         public bool Sense()
         {
-            return new Random().NextDouble() < 0.5;
+            return SumpResevoir.Instance.Value.GetMethaneLevelAsPercentage() > 50;
         }
     }
 }

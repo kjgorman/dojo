@@ -2,12 +2,15 @@
 {
     public class Pump
     {
-        public void Extract()
+        internal void Extract(SumpResevoir value)
         {
             // TODO this should somehow stop the overflow sensor from triggering
+            //
+            // maybe I should adjust the state of this weird singleton sump resevoir
+            // thing... or something?
         }
 
-        public void ReleaseBackPressure()
+        internal void ReleaseBackPressure(SumpResevoir value)
         {
             // TODO this should somehow stop the underflow sensor from triggering
         }

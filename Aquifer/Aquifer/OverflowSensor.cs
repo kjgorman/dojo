@@ -4,7 +4,7 @@
     {
         public bool Sense()
         {
-            return new Random().NextDouble() < 0.5;
+            return SumpResevoir.Instance.Value.GetVolume();
         }
     }
 }

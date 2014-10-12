@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ascensor", "Ascensor\Ascensor.csproj", "{79B0E241-850D-4BE1-82D0-A5CAAA0E4A28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ascensor.Test", "Ascensor.Test\Ascensor.Test.csproj", "{B4CBE3E8-7469-49A0-807F-934943DB5E26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ascensor.Machinery", "Ascensor.Machinery\Ascensor.Machinery.csproj", "{54676135-76C2-40B3-BDAE-1D4C627C6D14}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79B0E241-850D-4BE1-82D0-A5CAAA0E4A28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79B0E241-850D-4BE1-82D0-A5CAAA0E4A28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79B0E241-850D-4BE1-82D0-A5CAAA0E4A28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79B0E241-850D-4BE1-82D0-A5CAAA0E4A28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4CBE3E8-7469-49A0-807F-934943DB5E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4CBE3E8-7469-49A0-807F-934943DB5E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4CBE3E8-7469-49A0-807F-934943DB5E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4CBE3E8-7469-49A0-807F-934943DB5E26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54676135-76C2-40B3-BDAE-1D4C627C6D14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54676135-76C2-40B3-BDAE-1D4C627C6D14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54676135-76C2-40B3-BDAE-1D4C627C6D14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54676135-76C2-40B3-BDAE-1D4C627C6D14}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -8,22 +8,19 @@ namespace Ascensor.Machinery
     public class Machine<TState, TInput>
         where TState : DeterministicFiniteStateMachine<TState, TInput>, new()
     {
-        private readonly Queue<TState> _targets;
-        private readonly TState _start;
-        private readonly TState _goal;
+        private readonly TState _target;
 
         public Machine(params TState[] targets)
         {
             if (targets.Length == 0) throw new ArgumentException("requires at most one target");
 
-            _targets = new Queue<TState>(targets);
-            _goal = _targets.Last();
-            _start = _targets.Dequeue();
+            // TODO -- hmm... I'm getting params but just ignoring them, for now.
+            _target = targets.First();
         }
 
         private static IEnumerable<TState> Initial { get { return new TState().InitialStates; } }
+        private static IEnumerable<TInput> Inputs { get { return new TState().Inputs; } }
         private static IEnumerable<Transition<TState, TInput>> Transitions { get { return new TState().Transitions; } }
-        private static IEnumerable<TInput> Inputs { get { return new TState().Inputs; } } 
 
         public List<TState> RunToCompletion(int maximumSteps, bool shortest = false)
         {
@@ -32,9 +29,14 @@ namespace Ascensor.Machinery
             // or throws an unsatisfiable exception while forcing the enumerable.
             var paths = Run(maximumSteps);
 
-            return (shortest
-                ? paths.OrderBy(path => path.Count()).First()
-                : paths.First()).ToList();
+            var successful = paths.Where(path => _target.Equals(path.Last())).ToList();
+
+            if (successful.Any())
+            {
+                return successful.First().ToList();
+            }
+
+            throw new Machine.Unsatisfiable();
         }
 
         // TODO: implement this properly.
@@ -48,40 +50,32 @@ namespace Ascensor.Machinery
             // seem to figure out TState is going to be a reference type, despite
             // the constraint on DeterministicFiniteStateMachine
 
-            var successful = Initial
-                .SelectMany(state => RunFrom(state, _start, _targets, maximumSteps))
-                .Where(path => _goal.Equals(path.Last())).ToList();
+            // TODO -- Wow, this is obviously stupid and will never work for any form of recursion...
+            var paths = new List<List<TState>>();
 
-            if (false == successful.Any()) throw new Machine.Unsatisfiable();
-
-            return successful;
-        }
-
-        private IEnumerable<IEnumerable<TState>> RunFrom(TState state
-                                                       , TState target
-                                                       , Queue<TState> targets 
-                                                       , int maximumSteps)
-        {
-            if (maximumSteps == 0) return Stuck();
-
-            var current = Enumerables.Of(state);
-            if (state.Equals(target))
+            foreach (var state in Initial)
             {
-                if (targets.Count == 0) return Enumerables.Of(current);
+                if (state.Equals(_target)) return Enumerables.Of(Enumerables.Of(state));
 
-                targets = new Queue<TState>(targets);
-                target = targets.Dequeue();
-                return RunFrom(state, target, targets, maximumSteps).Select(current.Concat);
+                foreach (var input in Inputs)
+                {
+                    foreach (var transition in Transitions)
+                    {
+                        if (transition.Applicable(state, input))
+                        {
+                            paths.Add(new List<TState> { state, transition.Traverse(state, input) });
+                        }
+                    }
+                }
             }
 
-            var states = Inputs.SelectMany(input => Transitions
-                                            .Where(t => t.Applicable(state, input))
-                                            .Select(t => t.Traverse(state, input)))
-                                            .ToList();
-
-            return states.SelectMany(next => RunFrom(next, target, targets, maximumSteps - 1)).Select(current.Concat);
+            return paths;
         }
 
+        // represents the leaf of a stuck path, i.e. we have no where left to go
+        // FIXME -- using a null here is shit, but having a concrete stuck type
+        // will require a bit of rejigging of the already stupid types so I cbf
+        // doing that.
         private static IEnumerable<IEnumerable<TState>> Stuck()
         {
             return Enumerables.Of(Enumerables.Of<TState>(null));

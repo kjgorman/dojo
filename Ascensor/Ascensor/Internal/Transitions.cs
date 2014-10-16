@@ -12,7 +12,7 @@ namespace Ascensor.Internal
             {
                 return new HashSet<Transition<Elevator, ElevatorInput>>(new ElevatorTransition[]
                 {
-                    new Request(), new Timeout(), new Movement(), new Arrival()
+                    new Request(), new Timeout(), new Movement()
                 });
             }
         }
@@ -21,9 +21,7 @@ namespace Ascensor.Internal
         {
             public override bool Applicable(Elevator state, ElevatorInput input)
             {
-                return input is Internal.Request
-                       && state.RequestedFloor == null
-                       && state.Doors == Elevator.Door.Closed;
+                return true;
             }
 
             public override Elevator Traverse(Elevator state, ElevatorInput input)
@@ -45,54 +43,16 @@ namespace Ascensor.Internal
             }
         }
 
-        internal class Arrival : ElevatorTransition
-        {
-            public override bool Applicable(Elevator state, ElevatorInput input)
-            {
-                return input is Internal.Arrival
-                       && state.RequestedFloor != null
-                       && state.CurrentFloor == state.RequestedFloor
-                       && state.Doors == Elevator.Door.Closed;
-            }
-
-            public override Elevator Traverse(Elevator state, ElevatorInput input)
-            {
-                return state.With(requestedFloor: null, direction: Elevator.Movement.Idle);
-            }
-        }
-
         internal class Movement : ElevatorTransition
         {
             public override bool Applicable(Elevator state, ElevatorInput input)
             {
-                return input is Internal.Movement 
-                    && state.RequestedFloor != null
-                    && state.Doors == Elevator.Door.Closed;
-            }
-
-            private static int Step(Elevator state)
-            {
-                switch (state.Direction)
-                {
-                    case Elevator.Movement.Up  : return 1; // TODO make sure we can move off the top of the building...
-                    case Elevator.Movement.Idle: return 0;
-                    case Elevator.Movement.Down:
-                        return state.CurrentFloor > 0 ? -1 : 0;
-                }
-
-                throw new ArgumentOutOfRangeException();
+                return false;
             }
 
             public override Elevator Traverse(Elevator state, ElevatorInput input)
             {
-                var direction = state.RequestedFloor > state.CurrentFloor
-                    ? Elevator.Movement.Up
-                    : Elevator.Movement.Down;
-
-                var current = (int) state.CurrentFloor;
-                var next    = (uint) (current + Step(state));
-
-                return state.With(direction: direction, currentFloor: next);
+                throw new NotImplementedException();
             }
         }
 
@@ -100,24 +60,12 @@ namespace Ascensor.Internal
         {
             public override bool Applicable(Elevator state, ElevatorInput input)
             {
-                return input is Internal.Timeout 
-                    && (state.Doors == Elevator.Door.Opening
-                    || state.Doors == Elevator.Door.Closing 
-                    || state.Doors == Elevator.Door.Open);
+                return false;
             }
 
             public override Elevator Traverse(Elevator state, ElevatorInput input)
             {
-                var timeout = (Internal.Timeout) input;
-
-                switch (state.Doors)
-                {
-                    case Elevator.Door.Opening: return state.With(door: Elevator.Door.Open);
-                    case Elevator.Door.Open:    return state.With(door: Elevator.Door.Closing);
-                    case Elevator.Door.Closing: return state.With(door: Elevator.Door.Closed);
-                }
-
-                return state;
+                throw new NotImplementedException();
             }
         }
     }

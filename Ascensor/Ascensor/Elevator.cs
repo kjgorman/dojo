@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Ascensor.Internal;
 using Ascensor.Machinery;
 
@@ -26,10 +25,7 @@ namespace Ascensor
         public override HashSet<ElevatorInput> Inputs
         {
             // some inputs, e.g. a request from a floor, movement stop, door open timeout, door close
-            get { return new HashSet<ElevatorInput>(Request.AllFloors
-                                                   .Concat(Timeout.Timeouts)
-                                                   .Concat(Internal.Movement.Movements)
-                                                   .Concat(Arrival.Arrivals)); }
+            get { return new HashSet<ElevatorInput>(Request.AllFloors); }
         }
 
         public override HashSet<Transition<Elevator, ElevatorInput>> Transitions

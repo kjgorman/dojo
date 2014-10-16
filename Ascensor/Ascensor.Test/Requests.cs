@@ -30,6 +30,7 @@ namespace Ascensor.Test
             Assert.AreEqual(pathLimit, path.Count);
         }
 
+        [Ignore]
         [Test]
         public void ARequestFromAFloorAboveWillTriggerAnOpeningClosingSequence()
         {
@@ -51,6 +52,7 @@ namespace Ascensor.Test
             Assert.AreEqual(pathLimit, path.Count);
         }
 
+        [Ignore]
         [Test]
         public void ARequestFromAFloorAboveTheCurrentOneWillBeginMovingInThatDirectionIfTheDoorsAreClosed()
         {
@@ -74,6 +76,7 @@ namespace Ascensor.Test
             Assert.AreEqual(pathLimit, path.Count);
         }
 
+        [Ignore]
         [Test]
         public void ThereShouldNotBeAWayForTheDoorsToBeOpenAndNotHaveAnActiveRequest()
         {
@@ -91,6 +94,7 @@ namespace Ascensor.Test
             Assert.Throws<Machine.Unsatisfiable>(() => machine.RunToCompletion(pathLimit));
         }
 
+        [Ignore]
         [Test]
         public void WeShouldBeAbleToGetToAnIdleStateOnTheFirstFloor()
         {
@@ -111,6 +115,7 @@ namespace Ascensor.Test
             Assert.AreEqual(pathLimit, path.Count);
         }
 
+        [Ignore]
         [Test]
         public void WeShouldBeAbleToRoundTripFromTheFirstBackToGround()
         {
@@ -140,6 +145,7 @@ namespace Ascensor.Test
             Assert.AreEqual(21, path.Count);
         }
 
+        [Ignore]
         [Test]
         public void IfWeAskForTheShortestPathWeShouldGetIt()
         {

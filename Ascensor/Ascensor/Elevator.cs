@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Ascensor.Internal;
 using Ascensor.Machinery;
 
 namespace Ascensor
 {
+    [DebuggerDisplay("Floor = {CurrentFloor}; Requested = {RequestedFloor}; Doors are {Doors}; Moving {Direction}")]
     public class Elevator : DeterministicFiniteStateMachine<Elevator, ElevatorInput>
     {
         public enum Door { Open, Opening, Closing, Closed };

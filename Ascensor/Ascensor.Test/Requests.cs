@@ -1,4 +1,5 @@
-﻿using Ascensor.Internal;
+﻿using System.Linq;
+using Ascensor.Internal;
 using Ascensor.Machinery;
 using NUnit.Framework;
 
@@ -43,12 +44,11 @@ namespace Ascensor.Test
             var second = first.With(door: Elevator.Door.Closed);
 
             var machine = new Machine<Elevator, ElevatorInput>(first, second);
-            const int pathLimit = 5;
+            const int pathLimit = 6;
 
             var path = machine.RunToCompletion(pathLimit);
 
-            // idle/closed/0 -> request[1] -> idle/opening/0/1 -> open -> closing -> closed
-            Assert.AreEqual(6, path.Count);
+            Assert.AreEqual(pathLimit, path.Count);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace Ascensor.Test
             };
 
             var machine = new Machine<Elevator, ElevatorInput>(first);
-            const int pathLimit = 20;
+            const int pathLimit = 10;
 
             Assert.Throws<Machine.Unsatisfiable>(() => machine.RunToCompletion(pathLimit));
         }
@@ -109,6 +109,64 @@ namespace Ascensor.Test
             var path = machine.RunToCompletion(pathLimit);
 
             Assert.AreEqual(pathLimit, path.Count);
+        }
+
+        [Test]
+        public void WeShouldBeAbleToRoundTripFromTheFirstBackToGround()
+        {
+            var firstFloor = new Elevator
+            {
+                CurrentFloor = 2,
+                RequestedFloor = null,
+                Direction = Elevator.Movement.Idle,
+                Doors = Elevator.Door.Closed
+            };
+
+            var ground = new Elevator
+            {
+                CurrentFloor = 0,
+                RequestedFloor = null,
+                Direction = Elevator.Movement.Idle,
+                Doors = Elevator.Door.Closed
+            };
+
+            var machine = new Machine<Elevator, ElevatorInput>(firstFloor, ground);
+
+            const int pathLimit = 20;
+
+            var path = machine.RunToCompletion(pathLimit);
+
+            Assert.AreEqual(ground, path.Last());
+            Assert.AreEqual(21, path.Count);
+        }
+
+        [Test]
+        public void IfWeAskForTheShortestPathWeShouldGetIt()
+        {
+            var firstFloor = new Elevator
+            {
+                CurrentFloor = 2,
+                RequestedFloor = null,
+                Direction = Elevator.Movement.Idle,
+                Doors = Elevator.Door.Closed
+            };
+
+            var ground = new Elevator
+            {
+                CurrentFloor = 0,
+                RequestedFloor = null,
+                Direction = Elevator.Movement.Idle,
+                Doors = Elevator.Door.Closed
+            };
+
+            var machine = new Machine<Elevator, ElevatorInput>(firstFloor, ground);
+
+            const int pathLimit = 20;
+
+            var path = machine.RunToCompletion(pathLimit, shortest:true);
+
+            Assert.AreEqual(ground, path.Last());
+            Assert.AreEqual(18, path.Count);
         }
     }
 }

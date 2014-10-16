@@ -13,7 +13,7 @@ namespace Ascensor.Internal
         public uint Floor;
 
         public static IEnumerable<ElevatorInput> AllFloors =
-            Enumerable.Range(0, 2).Select(floor => new Request { Floor = (uint) floor });
+            Enumerable.Range(0, 3).Select(floor => new Request { Floor = (uint) floor });
     }
 
     public class Movement : ElevatorInput

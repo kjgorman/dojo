@@ -21,7 +21,9 @@ namespace Ascensor.Internal
         {
             public override bool Applicable(Elevator state, ElevatorInput input)
             {
-                return input is Internal.Request && state.RequestedFloor == null;
+                return input is Internal.Request
+                       && state.RequestedFloor == null
+                       && state.Doors == Elevator.Door.Closed;
             }
 
             public override Elevator Traverse(Elevator state, ElevatorInput input)
@@ -64,7 +66,8 @@ namespace Ascensor.Internal
             public override bool Applicable(Elevator state, ElevatorInput input)
             {
                 return input is Internal.Movement 
-                    && state.RequestedFloor != null;
+                    && state.RequestedFloor != null
+                    && state.Doors == Elevator.Door.Closed;
             }
 
             private static int Step(Elevator state)

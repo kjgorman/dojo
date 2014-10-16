@@ -9,26 +9,32 @@ namespace Ascensor.Machinery
         where TState : DeterministicFiniteStateMachine<TState, TInput>, new()
     {
         private readonly Queue<TState> _targets;
-        private TState _target;
+        private readonly TState _start;
+        private readonly TState _goal;
 
         public Machine(params TState[] targets)
         {
             if (targets.Length == 0) throw new ArgumentException("requires at most one target");
 
             _targets = new Queue<TState>(targets);
-            _target = _targets.Dequeue();
+            _goal = _targets.Last();
+            _start = _targets.Dequeue();
         }
 
         private static IEnumerable<TState> Initial { get { return new TState().InitialStates; } }
         private static IEnumerable<Transition<TState, TInput>> Transitions { get { return new TState().Transitions; } }
         private static IEnumerable<TInput> Inputs { get { return new TState().Inputs; } } 
 
-        public List<TState> RunToCompletion(int maximumSteps)
+        public List<TState> RunToCompletion(int maximumSteps, bool shortest = false)
         {
             // TODO: implement this properly
             // should return the first path to complete for your exploration technique,
             // or throws an unsatisfiable exception while forcing the enumerable.
-            return Run(maximumSteps).First().ToList();
+            var paths = Run(maximumSteps);
+
+            return (shortest
+                ? paths.OrderBy(path => path.Count()).First()
+                : paths.First()).ToList();
         }
 
         // TODO: implement this properly.
@@ -40,35 +46,45 @@ namespace Ascensor.Machinery
         {
             // [gotcha]: have to use .Equals rather than == as the compiler can't
             // seem to figure out TState is going to be a reference type, despite
-            // the constraint on NonDeterministicFiniteStateMachine
+            // the constraint on DeterministicFiniteStateMachine
 
-            var allPaths = Initial.SelectMany(state => RunFrom(state, maximumSteps));
-
-            var successful = allPaths.Where(path => path.Last().Equals(_target)).ToList();
+            var successful = Initial
+                .SelectMany(state => RunFrom(state, _start, _targets, maximumSteps))
+                .Where(path => _goal.Equals(path.Last())).ToList();
 
             if (false == successful.Any()) throw new Machine.Unsatisfiable();
 
             return successful;
         }
 
-        private IEnumerable<IEnumerable<TState>> RunFrom(TState state, int maximumSteps)
+        private IEnumerable<IEnumerable<TState>> RunFrom(TState state
+                                                       , TState target
+                                                       , Queue<TState> targets 
+                                                       , int maximumSteps)
         {
-            if (maximumSteps == 0) return Enumerables.Of(Enumerable.Empty<TState>());
+            if (maximumSteps == 0) return Stuck();
 
             var current = Enumerables.Of(state);
-            if (state.Equals(_target))
+            if (state.Equals(target))
             {
-                if (_targets.Count == 0) return Enumerables.Of(current);
+                if (targets.Count == 0) return Enumerables.Of(current);
 
-                _target = _targets.Dequeue();
-                return RunFrom(state, maximumSteps).Select(current.Concat);
+                targets = new Queue<TState>(targets);
+                target = targets.Dequeue();
+                return RunFrom(state, target, targets, maximumSteps).Select(current.Concat);
             }
 
             var states = Inputs.SelectMany(input => Transitions
                                             .Where(t => t.Applicable(state, input))
-                                            .Select(t => t.Traverse(state, input)));
+                                            .Select(t => t.Traverse(state, input)))
+                                            .ToList();
 
-            return states.SelectMany(next => RunFrom(next, maximumSteps - 1)).Select(current.Concat);
+            return states.SelectMany(next => RunFrom(next, target, targets, maximumSteps - 1)).Select(current.Concat);
+        }
+
+        private static IEnumerable<IEnumerable<TState>> Stuck()
+        {
+            return Enumerables.Of(Enumerables.Of<TState>(null));
         }
     }
 

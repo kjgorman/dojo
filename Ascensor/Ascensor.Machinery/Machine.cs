@@ -6,18 +6,22 @@ using Ascensor.Machinery.Lang;
 namespace Ascensor.Machinery
 {
     public class Machine<TState, TInput>
-        where TState : NonDeterministicFiniteStateMachine<TState, TInput>, new()
+        where TState : DeterministicFiniteStateMachine<TState, TInput>, new()
     {
-        private readonly Stack<TState> _targets;
+        private readonly Queue<TState> _targets;
         private TState _target;
 
         public Machine(params TState[] targets)
         {
             if (targets.Length == 0) throw new ArgumentException("requires at most one target");
 
-            _targets = new Stack<TState>(targets);
-            _target = _targets.Pop();
+            _targets = new Queue<TState>(targets);
+            _target = _targets.Dequeue();
         }
+
+        private static IEnumerable<TState> Initial { get { return new TState().InitialStates; } }
+        private static IEnumerable<Transition<TState, TInput>> Transitions { get { return new TState().Transitions; } }
+        private static IEnumerable<TInput> Inputs { get { return new TState().Inputs; } } 
 
         public List<TState> RunToCompletion(int maximumSteps)
         {
@@ -34,29 +38,37 @@ namespace Ascensor.Machinery
         // transition step, we throw Machine.Unsatisfiable
         public IEnumerable<IEnumerable<TState>> Run(int maximumSteps)
         {
-            var initial = new TState().InitialStates;
-
             // [gotcha]: have to use .Equals rather than == as the compiler can't
             // seem to figure out TState is going to be a reference type, despite
             // the constraint on NonDeterministicFiniteStateMachine
-            var satisfying = initial.FirstOrDefault(state => state.Equals(_target));
 
-            if (satisfying != null)
+            var allPaths = Initial.SelectMany(state => RunFrom(state, maximumSteps));
+
+            var successful = allPaths.Where(path => path.Last().Equals(_target)).ToList();
+
+            if (false == successful.Any()) throw new Machine.Unsatisfiable();
+
+            return successful;
+        }
+
+        private IEnumerable<IEnumerable<TState>> RunFrom(TState state, int maximumSteps)
+        {
+            if (maximumSteps == 0) return Enumerables.Of(Enumerable.Empty<TState>());
+
+            var current = Enumerables.Of(state);
+            if (state.Equals(_target))
             {
-                if (_targets.Count == 0)
-                    return Enumerables.Of(Enumerables.Of(satisfying));
-                
-                _target = _targets.Pop();
+                if (_targets.Count == 0) return Enumerables.Of(current);
+
+                _target = _targets.Dequeue();
+                return RunFrom(state, maximumSteps).Select(current.Concat);
             }
 
-            maximumSteps--;
-            if (maximumSteps == 0) throw new Machine.Unsatisfiable();
+            var states = Inputs.SelectMany(input => Transitions
+                                            .Where(t => t.Applicable(state, input))
+                                            .Select(t => t.Traverse(state, input)));
 
-            // apply transitions for all valid inputs
-            // to get a new set of states.
-            //
-            // rinse and repeat?
-            return Enumerables.Of(Enumerable.Empty<TState>());
+            return states.SelectMany(next => RunFrom(next, maximumSteps - 1)).Select(current.Concat);
         }
     }
 

@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Ascensor.Inputs;
+using Ascensor.Internal;
 using Ascensor.Machinery;
 using NUnit.Framework;
 

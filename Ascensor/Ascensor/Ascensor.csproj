@@ -40,8 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Elevator.cs" />
-    <Compile Include="Inputs\ElevatorInput.cs" />
+    <Compile Include="Internal\Inputs.cs" />
     <Compile Include="Internal\States.cs" />
+    <Compile Include="Internal\Transitions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

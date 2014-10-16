@@ -21,7 +21,7 @@ Ascensor.Machinery.DeterministicFiniteStateMachine.
 
 Anyway, the idea is we are going to try and model a system to map
 paths through a building for an elevator, by exploring the state space
-of transitions. For example, and elevator like the one defined in
+of transitions. For example, an elevator like the one defined in
 Ascensor.Elevator has four properties: the current floor, the
 requested floor (when someone presses a button somewhere), the state
 of the doors (open/opening/closing/closed), and the direction of
@@ -38,7 +38,7 @@ when they press a button on a floor. Some other ones might be timeout
 at the destination floor.
 
 There are also guards around when an input is applicable to a given
-state, for example, and elevator may not be moving while the doors are
+state, for example, an elevator may not be moving while the doors are
 open!
 
 The exercises should proceed relatively straightforwardly, I hope.
@@ -88,3 +88,7 @@ could be fun if you end up breezing through the beginning:
     this real easy.
 
 glhf!
+
+p.s. if things are totally not making any sense and you sort of want
+to cheat just a little bit, there's a relatively functional version at
+7d4811302ca422459fc15fecb5353da10fb12536. 

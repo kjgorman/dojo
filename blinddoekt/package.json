@@ -1,0 +1,21 @@
+{
+  "name": "blinddoekt",
+  "version": "0.0.0",
+  "description": "it means blindfold in flemish",
+  "main": "index.js",
+  "author": "kjgorman",
+  "license": "ISC",
+  "dependencies": {
+    "express": "~4.9.8",
+    "chalk": "~0.5.1",
+    "MD5": "~1.2.1"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-express-server": "~0.4.19",
+    "mocha": "~2.0.0",
+    "grunt-simple-mocha": "~0.4.0"
+  }
+}

@@ -9,7 +9,7 @@
         });
 
         server.put('/:hash/step', function (req, res) {
-
+            res.status(500).send({ error: 'incorrect pathing for steps' })
         });
 
         server.put('/register/:name', function (req, res) {

@@ -157,6 +157,7 @@ describe('finding out what your role is in a team by sending yr ip', function ()
           , b = new team('b')
           , first = a.allocateMember(firstIp)
 
-        assert.equal(first, team.findMemberById([a, b], 'a', firstIp))
+        assert.deepEqual([ { ip: firstIp, membership: first }]
+                       , team.findMemberById([a, b], 'a', firstIp))
     })
 })

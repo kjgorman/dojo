@@ -22,7 +22,7 @@
 
         this.view = function view () {
             return rp({
-                uri: this.apiBase + '/' + this.hash + '/view',
+                uri: base + '/' + this.hash + '/view',
                 method: 'GET'
             })
         }
@@ -34,7 +34,7 @@
 
         this.step = function step (steps) {
             return rp({
-                uri: this.client.apiBase + '/' + this.hash + '/step',
+                uri: base + '/' + this.hash + '/step',
                 method: 'PUT'
             })
         }

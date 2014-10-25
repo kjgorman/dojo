@@ -2,6 +2,7 @@
     'use strict';
 
     var lang = require('./lang')
+      , error = require('./error')
 
     var App = function (routes, team) {
 	this.teams = []
@@ -31,6 +32,8 @@
 
     App.prototype.getView = function getView (navHash) {
 	var current = this.team.findByNav(this.teams, navHash)
+
+        if (!current) return new FormattedError('you are not the navigator')
     }
 
     module.exports = App

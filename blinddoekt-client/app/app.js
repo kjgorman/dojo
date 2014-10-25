@@ -24,14 +24,25 @@
 
     App.prototype.view = function view () {
         return this.client(api, 'foo').then(function (client) {
-            return client.view()
+            if (client.view) return client.view()
+            else invalidOperation(true)
         })
     }
 
     App.prototype.step = function step () {
         return this.client(api, 'foo').then(function (client) {
-            return client.step([])
+            if (client.step) return client.step([])
+            else invalidOperation(false)
         })
+    }
+
+    function invalidOperation (view) {
+        var viewing = 'you\'re currently the driver, so can\'t view anything!'
+          , stepping = 'you\'re currently the navigator, so can\'t move anything!'
+
+        throw new Error((view ? viewing : stepping) +
+                        '\n'+
+                        'it\'s called blinddoekt for a reason')
     }
 
     module.exports = App

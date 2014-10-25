@@ -24,7 +24,12 @@ module.exports = function (grunt) {
 	    tasks:['jshint', 'simplemocha'],
 	    options: {
 		spawn: false
-	    }
+	    },
+            express: {
+                files: ['app/**/*.js'],
+                tasks: ['express:dev'],
+                options: { spawn: false }
+            }
 	}
     });
 

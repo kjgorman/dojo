@@ -2,7 +2,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
 	pkg: grunt.file.readJSON('package.json'),
 	jshint: {
-	    file: ['index.js', 'app/**/*.js', 'client/**/*.js'],
+	    file: ['index.js', 'client/**/*.js'],
 	    options: {
 		laxcomma: true,
 		asi: true,
@@ -20,11 +20,16 @@ module.exports = function (grunt) {
 	    all: { src: ['test/**/*.js'] }
 	},
 	watch: {
-	    files:['app/**/*.js', 'test/**/*.js', 'client/**/*.js'],
+	    files:['app/**/*.js', 'client/**/*.js'],
 	    tasks:['jshint', 'simplemocha'],
 	    options: {
 		spawn: false
-	    }
+	    },
+            express: {
+                files: ['client/**/*.js'],
+                tasks: ['express:dev'],
+                options: { spawn: false }
+            }
 	}
     });
 

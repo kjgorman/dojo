@@ -17,20 +17,13 @@ module.exports = function (grunt) {
 	    }
 	},
 	simplemocha: {
-	    all: { src: ['**/*.js'] }
-	}, 
+	    all: { src: ['test/**/*.js'] }
+	},
 	watch: {
-	    files:['**/*.js'],
-	    tasks:['jshint', 'simplemocha'], 
+	    files:['app/**/*.js', 'test/**/*.js'],
+	    tasks:['jshint', 'simplemocha'],
 	    options: {
 		spawn: false
-	    },
-	    express: {
-		files: ['**/*.js'],
-		tasks: ['express:dev'],
-		options: {
-		    spawn:false
-		}
 	    }
 	}
     });

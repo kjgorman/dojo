@@ -9,14 +9,20 @@
         });
 
         server.put('/:hash/step', function (req, res) {
-            
+
         });
 
         server.put('/register/:name', function (req, res) {
-            var result = app.registerTeam(req.params.name)
-            
+            var result = app.registerTeam(req.params.name, req.ip)
+
             res.status(200).send(result)
         });
+
+        server.get('/whoami/:name', function (req, res) {
+            var result = app.whoAmI(req.params.name, req.ip)
+
+            res.status(200).send(result)
+        })
     }
 
     module.exports = { configure: configure };

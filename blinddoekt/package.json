@@ -4,11 +4,12 @@
   "description": "it means blindfold in flemish",
   "main": "index.js",
   "author": "kjgorman",
-  "license": "ISC",
+  "license": "MIT",
+  "repository": "git@github.com:kjgorman/dojo.git",
   "dependencies": {
-    "express": "~4.9.8",
+    "MD5": "~1.2.1",
     "chalk": "~0.5.1",
-    "MD5": "~1.2.1"
+    "express": "~4.9.8"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

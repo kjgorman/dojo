@@ -13,6 +13,7 @@
 	  , assignedNavigator = false
 
 	this.name = name
+        this.registry = {}
 
 	this.driverHash = md5(name + 'driver')
 	this.navigatorHash = md5(name + 'navigator')
@@ -34,8 +35,8 @@
 	}
     }
 
-    Team.prototype.allocateMember = function allocateMember () {
-	if (false === this.hasDriver()) {
+    Team.prototype.tryAllocate = function tryAllocate () {
+        if (false === this.hasDriver()) {
 	    this.assignDriver()
 	    return { identifier: this.driverHash, role: 'driver' }
 	} else if (false === this.hasNavigator()) {
@@ -44,6 +45,18 @@
 	}
 
 	return { error: 'This team already has a driver and navigator!' }
+    }
+
+    Team.prototype.allocateMember = function allocateMember (callingIp) {
+        var team
+
+        if (this.registry[callingIp]) {
+            return this.registry[callingIp]
+        }
+
+        team = this.tryAllocate()
+        this.registry[callingIp] = team
+        return team
     }
 
     function findByHash(teams, hash, key) {
@@ -58,6 +71,18 @@
 
     Team.findByDriver = function findByDriver (teams, hash) {
 	return findByHash(teams, hash, 'driverHash')
+    }
+
+    Team.findMemberById = function findMemberById (teams, teamName, callingIp) {
+        return lang.first(lang.flatMap(teams.filter(function (t) {
+            return t.name === teamName
+        }))(function (t) {
+            return Object.keys(t.registry).map(function (k) {
+                return { ip: k, membership: t.registry[k] }
+            })
+        }).filter(function (m) {
+            return m.ip === callingIp
+        })).membership
     }
 
     module.exports = Team;

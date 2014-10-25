@@ -19,37 +19,41 @@
     function Navigator (hash, team, base) {
         Navigator.super_.call(this, base, team)
         this.hash = hash
-    }
 
-    Navigator.prototype.view = function view () {
-        return rp({
-            uri: this.apiBase + '/' + this.hash + '/view',
-            method: 'GET'
-        })
+        this.view = function view () {
+            return rp({
+                uri: this.apiBase + '/' + this.hash + '/view',
+                method: 'GET'
+            })
+        }
     }
 
     function Driver (hash, team, base) {
         Driver.super_.call(this, base, team)
         this.hash = hash
-    }
 
-    Driver.prototype.step = function step (steps) {
-        return rp({
-            uri: this.client.apiBase + '/' + this.hash + '/step',
-            method: 'PUT'
-        })
+        this.step = function step (steps) {
+            return rp({
+                uri: this.client.apiBase + '/' + this.hash + '/step',
+                method: 'PUT'
+            })
+        }
     }
 
     util.inherits(Driver, Client)
     util.inherits(Navigator, Client)
 
+    var _cached = {}
+
     module.exports = function (base, team) {
-        return rp({
+        if (_cached[team]) return _cached[team]
+
+        return _cached[team] = rp({
             uri: base + '/register/' + team,
             method: 'PUT'
         }).then(function (response) {
             var membership = JSON.parse(response)
-            , Ctor = (membership.role === 'driver' ? Driver : Navigator)
+              , Ctor = (membership.role === 'driver' ? Driver : Navigator)
 
             return new Ctor(membership.identifier, team, base)
         })

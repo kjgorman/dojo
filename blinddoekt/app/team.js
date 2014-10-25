@@ -74,15 +74,13 @@
     }
 
     Team.findMemberById = function findMemberById (teams, teamName, callingIp) {
-        return lang.first(lang.flatMap(teams.filter(function (t) {
-            return t.name === teamName
-        }))(function (t) {
+        return lang.flatMap(teams)(function (t) {
             return Object.keys(t.registry).map(function (k) {
                 return { ip: k, membership: t.registry[k] }
             })
         }).filter(function (m) {
             return m.ip === callingIp
-        })).membership
+        })
     }
 
     module.exports = Team;

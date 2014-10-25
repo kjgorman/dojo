@@ -73,10 +73,10 @@
 	return findByHash(teams, hash, 'driverHash')
     }
 
-    Team.findMemberById = function findMemberById (teams, teamName, callingIp) {
+    Team.findMemberById = function findMemberById (teams, callingIp) {
         return lang.flatMap(teams)(function (t) {
             return Object.keys(t.registry).map(function (k) {
-                return { ip: k, membership: t.registry[k] }
+                return { ip: k, membership: t.registry[k], team: t }
             })
         }).filter(function (m) {
             return m.ip === callingIp

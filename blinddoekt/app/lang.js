@@ -21,6 +21,11 @@
                 return Array.prototype.concat.apply([], lst.map(fn))
             }
         },
-        id: function (x) { return x }
+        id: function (x) { return x },
+        pluck: function (prop) {
+            return function (lst) {
+                return lst.map(function (x) { return x[prop] })
+            }
+        }
     }
 }()

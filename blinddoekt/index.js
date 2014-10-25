@@ -1,6 +1,7 @@
 var chalk     = require('chalk')
   , express   = require('express')
-  , logging   = require('./app/logging')
+  , logging   = require('./middleware/logging')
+  , rateLimit = require('./middleware/throughput')
   , routes    = require('./app/routes')
   , teams     = require('./app/team')
   , blindkoet = require('./app/app')
@@ -8,6 +9,8 @@ var chalk     = require('chalk')
   , app       = new blindkoet(routes, teams)
 
 server.use(logging)
+server.use(rateLimit(app))
+
 app.configure(server)
 
 server.listen(3001, function () {

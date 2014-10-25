@@ -26,14 +26,20 @@
 	return current.allocateMember(callingIp)
     }
 
-    App.prototype.whoAmI = function whoAmI (teamName, callingIp) {
-        return this.team.findMemberById(this.teams, teamName, callingIp)
+    App.prototype.whoAmI = function whoAmI (callingIp) {
+        return this.team.findMemberById(this.teams, callingIp)
     }
 
     App.prototype.getView = function getView (navHash) {
 	var current = this.team.findByNav(this.teams, navHash)
 
         if (!current) return new FormattedError('you are not the navigator')
+    }
+
+    App.prototype.findTeamByIp = function findTeamByIp (ip) {
+        return lang.pluck('team')(this
+                                  .team
+                                  .findMemberById(this.teams, ip))
     }
 
     module.exports = App

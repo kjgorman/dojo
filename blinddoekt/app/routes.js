@@ -19,7 +19,7 @@
         });
 
         server.get('/whoami/:name', function (req, res) {
-            var result = app.whoAmI(req.params.name, req.ip)
+            var result = app.whoAmI(req.ip)
 
             res.status(200).send(result)
         })

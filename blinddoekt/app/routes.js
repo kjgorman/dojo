@@ -23,6 +23,12 @@
 
             res.status(200).send(result)
         })
+
+        server.get('/map', function (req, res) {
+            var result = app.map()
+
+            res.status(200).send(result)
+        })
     }
 
     module.exports = { configure: configure };

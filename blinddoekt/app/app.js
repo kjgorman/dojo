@@ -10,6 +10,16 @@
 	this.team = team
     }
 
+    var _map = null
+
+    App.prototype.map = function map () {
+        if (_map) return _map.toString()
+        var mapping = require('./mapping')
+
+        _map = mapping.generate(40, 100)
+        return _map.toString()
+    }
+
     App.prototype.configure = function configure (server) {
 	this.routes.configure(server, this)
     }

@@ -1,5 +1,6 @@
 var chalk     = require('chalk')
   , express   = require('express')
+  , parser    = require('body-parser')
   , logging   = require('./middleware/logging')
   , rateLimit = require('./middleware/throughput')
   , mapping   = require('./app/mapping')
@@ -9,6 +10,7 @@ var chalk     = require('chalk')
   , server    = express()
   , app       = new blindkoet(routes, teams, mapping)
 
+server.use(parser.json())
 server.use(logging)
 server.use(rateLimit(app))
 

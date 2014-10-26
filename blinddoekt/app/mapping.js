@@ -27,6 +27,32 @@
         return new Map(this.cells.slice(lower, upper))
     }
 
+    Map.prototype.traverse = function traverse (location, path) {
+        var limit = 20, step = 0, current = location, next
+
+        while (step++ < limit && path.length > 0) {
+            next = path[0]
+            if (false === isAdjacent(current, next)) break
+            if (false === accessible(next, this.cells)) break
+
+            current = next
+            path.shift()
+        }
+
+        return { remaining: path, position: current }
+    }
+
+    function accessible (location, cells) {
+        return cells[location.row][location.col] !== 1
+    }
+
+    function isAdjacent(first, second) {
+        var row = Math.abs(first.row - second.row)
+          , col = Math.abs(first.col - second.col)
+
+        return (row === 0 && col === 1) || (col === 0 && row === 1)
+    }
+
     function clamp (row, cells) {
         return Math.max(0, Math.min(row, cells.length))
     }
@@ -77,5 +103,5 @@
         })
     }
 
-    module.exports = { generate: generate, encode: encode }
+    module.exports = { generate: generate, encode: encode, Map: Map }
 }()

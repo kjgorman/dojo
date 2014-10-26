@@ -8,6 +8,7 @@
   "repository": "git@github.com:kjgorman/dojo.git",
   "dependencies": {
     "MD5": "~1.2.1",
+    "body-parser": "^1.9.1",
     "chalk": "~0.5.1",
     "express": "~4.9.8"
   },

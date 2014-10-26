@@ -90,3 +90,55 @@ describe('encoding', function () {
         assert.equal(Math.pow(2, 31), mapping.encode(m)[0])
     })
 })
+
+describe('traversals', function () {
+    it('should be able to move one step from zero to zero', function () {
+        var m = new mapping.Map([[1, 0, 0, 1]])
+          , starting = { row: 0, col: 1 }
+          , path = [ { row: 0, col: 2 } ]
+          , next = m.traverse(starting, path)
+
+        assert.equal(0, next.remaining.length)
+        assert.deepEqual({ row: 0, col: 2 }, next.position)
+    })
+
+    it('should be able to move across rows as well', function () {
+        var m = new mapping.Map([[1, 0, 0, 1], [1, 0, 0, 1]])
+          , starting = { row: 0, col: 1 }
+          , path = [ {row: 1, col: 1 } ]
+          , next = m.traverse(starting, path)
+
+        assert.equal(0, next.remaining.length)
+        assert.deepEqual({ row: 1, col: 1 }, next.position)
+    })
+
+    it('should be able to move multiple steps', function () {
+        var m = new mapping.Map([[1, 0, 0, 1], [1, 0, 0, 1]])
+          , starting = { row: 0, col: 1 }
+          , path = [ {row: 0, col: 2 }, { row: 1, col: 2 } ]
+          , next = m.traverse(starting, path)
+
+        assert.equal(0, next.remaining.length)
+        assert.deepEqual({ row: 1, col: 2 }, next.position)
+    })
+
+    it('should not allow you to move more than one space at a time', function () {
+        var m = new mapping.Map([[1, 0, 0, 1], [1, 0, 0, 1], [1, 0, 0, 1]])
+          , starting = { row: 0, col: 1 }
+          , path = [ { row: 2, col: 1 } ]
+          , next = m.traverse(starting, path)
+
+        assert.equal(1, next.remaining.length)
+        assert.deepEqual(starting, next.position)
+    })
+
+    it('should not allow you to move diagonally', function () {
+        var m = new mapping.Map([[1, 0, 0, 1], [1, 0, 0, 1]])
+          , starting = { row: 0, col: 1 }
+          , path = [ { row: 1, col: 2 } ]
+          , next = m.traverse(starting, path)
+
+        assert.equal(1, next.remaining.length)
+        assert.deepEqual(starting, next.position)
+    })
+})

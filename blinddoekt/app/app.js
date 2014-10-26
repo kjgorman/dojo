@@ -40,6 +40,12 @@
         return this.mapping.encode(this.map.slice(current.location))
     }
 
+    App.prototype.applySteps = function applySteps (steps) {
+        console.log(steps)
+
+        return steps
+    }
+
     App.prototype.getLocation = function getLocation (navHash) {
         var current = this.team.findByNav(this.teams, navHash)
 

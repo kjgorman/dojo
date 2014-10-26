@@ -14,6 +14,7 @@
 
 	this.name = name
         this.registry = {}
+        this.location = { row: 0, col: 32 }
 
 	this.driverHash = md5(name + 'driver')
 	this.navigatorHash = md5(name + 'navigator')

@@ -20,6 +20,17 @@
         return str
     }
 
+    Map.prototype.slice = function slice (location) {
+        var lower = clamp(location.row - 10, this.cells)
+          , upper = clamp(location.row + 10, this.cells)
+
+        return new Map(this.cells.slice(lower, upper))
+    }
+
+    function clamp (row, cells) {
+        return Math.max(0, Math.min(row, cells.length))
+    }
+
     function generateCell (row, col, width, height) {
         if (col === 0 || col === width - 1) return 1
 

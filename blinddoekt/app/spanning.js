@@ -14,17 +14,20 @@
             set(0, col)
         }
 
+        function markUnvisited (adjacent) {
+            return !set(adjacent.row, adjacent.col)
+        }
+
         while (queue.length > 0) {
             current = queue.shift()
             if (current.row === cells.length - 1)
                 return true
 
-            queue.push.apply(queue, adjacentTo(current, cells).filter(function (adjacent) {
-                return !set(adjacent.row, adjacent.col)
-            }))
+            queue.push.apply(queue, adjacentTo(current, cells).filter(markUnvisited))
         }
         return false
     }
+
 
     function adjacentTo(point, cells) {
         var adj = []

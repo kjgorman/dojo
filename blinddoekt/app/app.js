@@ -1,23 +1,15 @@
 +function () {
     'use strict';
 
-    var lang = require('./lang')
-      , error = require('./error')
+    var lang           = require('./lang')
+      , FormattedError = require('./error')
 
-    var App = function (routes, team) {
+    var App = function (routes, team, mapping) {
 	this.teams = []
 	this.routes = routes
 	this.team = team
-    }
-
-    var _map = null
-
-    App.prototype.map = function map () {
-        if (_map) return _map
-        var mapping = require('./mapping')
-
-        _map = mapping.encode(mapping.generate(64, 1))
-        return _map
+        this.mapping = mapping
+        this.map = mapping.generate(64, 100)
     }
 
     App.prototype.configure = function configure (server) {
@@ -44,6 +36,16 @@
 	var current = this.team.findByNav(this.teams, navHash)
 
         if (!current) return new FormattedError('you are not the navigator')
+
+        return this.mapping.encode(this.map.slice(current.location))
+    }
+
+    App.prototype.getLocation = function getLocation (navHash) {
+        var current = this.team.findByNav(this.teams, navHash)
+
+        if (!current) return new FormattedError('you are not the navigator')
+
+        return current.location
     }
 
     App.prototype.findTeamByIp = function findTeamByIp (ip) {

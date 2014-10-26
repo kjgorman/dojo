@@ -12,7 +12,10 @@
     function echo (res, promise) {
         promise
             .catch(function (apiCall) {
-                error(res, { status: apiCall.statusCode, message: apiCall.response.body })
+                error(res, {
+                    status: apiCall.statusCode,
+                    message: apiCall.response ? apiCall.response.body : 'no response'
+                })
             })
             .then(function (data) { ok (res, data) })
             .catch(function (err) { error(res, err.toString()) })
@@ -29,6 +32,10 @@
 
         server.get('/whoami', function (req, res) {
             echo(res, application.whoami())
+        })
+
+        server.get('/whereami', function (req, res) {
+            echo(res, application.whereami())
         })
 
         server.get('/view', function (req, res) {

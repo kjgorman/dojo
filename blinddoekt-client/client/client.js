@@ -26,6 +26,13 @@
                 method: 'GET'
             })
         }
+
+        this.whereAmI = function whereAmI () {
+            return rp({
+                uri: base + '/' + this.hash + '/whereami',
+                method: 'GET'
+            })
+        }
     }
 
     function Driver (hash, team, base) {

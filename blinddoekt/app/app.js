@@ -13,11 +13,11 @@
     var _map = null
 
     App.prototype.map = function map () {
-        if (_map) return _map.toString()
+        if (_map) return _map
         var mapping = require('./mapping')
 
-        _map = mapping.generate(40, 100)
-        return _map.toString()
+        _map = mapping.encode(mapping.generate(64, 1))
+        return _map
     }
 
     App.prototype.configure = function configure (server) {

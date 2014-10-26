@@ -2,6 +2,7 @@
     'use strict';
 
     var spanning = require('./spanning')
+      , lang     = require('./lang')
 
     function Map (cells) {
         this.cells = cells
@@ -48,5 +49,22 @@
         return map
     }
 
-    module.exports = { generate: generate }
+    function encode (map) {
+        var width = map.cells[0].length
+          , chunks = width/32
+
+        if (width % 32 !== 0)
+            throw new Error('map must have a width that is a multiple of 32 (got: '+width+')')
+
+        return lang.flatMap(map.cells)(function (row) {
+            var i = 0, res = []
+            for(;i < chunks; i++)
+                res.push(row.slice(i * 32, (i+1)*32))
+            return res
+        }).map(function (chunk) {
+            return parseInt(chunk.join(''), 2)
+        })
+    }
+
+    module.exports = { generate: generate, encode: encode }
 }()

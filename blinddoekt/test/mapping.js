@@ -52,3 +52,41 @@ describe('spanning operations', function () {
         assert.equal(false, spanning(map))
     })
 })
+
+describe('encoding', function () {
+    it('should reject anything that isn\'t a multiple of 32 bits wide', function () {
+        var m = mapping.generate(33, 10)
+
+        assert.throws(function () {
+            mapping.encode(m)
+        })
+    })
+
+    it('should convert a 32 wide row into it\'s integer representation', function () {
+        var m = { cells: [[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]] }
+
+        assert.equal(Math.pow(2, 31) + 1, mapping.encode(m)[0])
+    })
+
+    it('should convert the 2d array to a row major 1d array', function () {
+        var m = { cells: [[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
+                        , [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]] }
+
+        assert.equal(Math.pow(2, 31) + 1, mapping.encode(m)[0])
+        assert.equal(Math.pow(2, 31) + 3, mapping.encode(m)[1])
+    })
+
+    it('should convert a 64 bit row into two integers', function () {
+        var i = 1, m = { cells: [] }, row = []
+
+        row.push(1)
+        for(; i < 63; i++)
+            row.push(0)
+        row.push(1)
+
+        m.cells.push(row)
+
+        assert.equal(2, mapping.encode(m).length)
+        assert.equal(Math.pow(2, 31), mapping.encode(m)[0])
+    })
+})

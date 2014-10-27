@@ -45,6 +45,16 @@
         server.get('/step', function (req, res) {
             echo(res, application.step())
         })
+
+        server.get('/ping', function (req, res) {
+            echo(res, application.ping())
+        })
+
+        server.put('/ping', function (req, res) {
+            console.log('[PING | %s | %j]', req.ip, req.body)
+
+            res.status(200).send('alive and well!')
+        })
     }
 
     module.exports = { configure: configure }

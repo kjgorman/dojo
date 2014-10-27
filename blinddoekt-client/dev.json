@@ -1,4 +1,5 @@
 {
    "team": "foo",
+   "teamMateUri": "http://localhost:3002",
    "apiUri": "http://localhost:3001"
 }

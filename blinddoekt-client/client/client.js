@@ -16,6 +16,16 @@
         })
     }
 
+    Client.prototype.ping = function ping () {
+        return rp({
+            uri: this.apiBase + '/ping',
+            method: 'PUT',
+            json: {
+                data: 'this is some test data'
+            }
+        })
+    }
+
     function Navigator (hash, team, base) {
         Navigator.super_.call(this, base, team)
         this.hash = hash
@@ -42,7 +52,8 @@
         this.step = function step (steps) {
             return rp({
                 uri: base + '/' + this.hash + '/step',
-                method: 'PUT'
+                method: 'PUT',
+                json: steps
             })
         }
     }
@@ -53,6 +64,7 @@
     var _cached = {}
 
     module.exports = function (base, team) {
+        if (team === 'buddy') return new Client(base)
         if (_cached[team]) return _cached[team]
 
         return _cached[team] = rp({

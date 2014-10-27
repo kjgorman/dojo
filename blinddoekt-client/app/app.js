@@ -7,6 +7,7 @@
 
         this.api = config.apiUri
         this.team = config.team
+        this.teamMate = config.teamMateUri
     }
 
     App.prototype.configure = function configure (server) {
@@ -38,9 +39,15 @@
 
     App.prototype.step = function step () {
         return this.client(this.api, this.team).then(function (client) {
-            if (client.step) return client.step([])
+            if (client.step) return client.step([1,2,3,4,5,6,7,8,9,10].map(function (r) {
+                return { row: r, col: 32 }
+            }))
             else invalidOperation(false)
         })
+    }
+
+    App.prototype.ping = function ping () {
+        return this.client(this.teamMate, 'buddy').ping()
     }
 
     function invalidOperation (view) {

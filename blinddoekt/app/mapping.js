@@ -4,8 +4,10 @@
     var spanning = require('./spanning')
       , lang     = require('./lang')
 
-    function Map (cells) {
+    function Map (cells, lower, upper) {
         this.cells = cells
+	this.lower = lower || 0
+	this.upper = upper || cells.length
     }
 
     Map.prototype.toString = function toString () {
@@ -24,22 +26,28 @@
         var lower = clamp(location.row - 10, this.cells)
           , upper = clamp(location.row + 10, this.cells)
 
-        return new Map(this.cells.slice(lower, upper))
+        return new Map(this.cells.slice(lower, upper), lower, upper)
     }
 
     Map.prototype.traverse = function traverse (location, path) {
-        var limit = 20, step = 0, current = location, next
+        var limit = 20, step = 0, current = location, next, reason
 
         while (step++ < limit && path.length > 0) {
             next = path[0]
-            if (false === isAdjacent(current, next)) break
-            if (false === accessible(next, this.cells)) break
+            if (false === isAdjacent(current, next)) {
+		reason = JSON.stringify(next) + ' was not adjacent'
+		break
+	    }
+            if (false === accessible(next, this.cells)) {
+		reason = JSON.stringify(next) + ' was not passable'
+		break
+	    }
 
             current = next
             path.shift()
         }
 
-        return { remaining: path, position: current }
+        return { remaining: path, position: current, reason: reason }
     }
 
     function accessible (location, cells) {

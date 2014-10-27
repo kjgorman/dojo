@@ -4,17 +4,15 @@
       , FormattedError = require('../app/error')
       , Maybe          = require('./maybe')
       , timingCache    = {}
-      , rateLimit
 
-    function restrict (app, config) {
-	rateLimit = config.rateLimit
-
+    function restrict (app) {
         return function (req, res, next) {
             var team = Maybe.fromList(app.findTeamByIp(req.ip))
               , now = new Date()
               , previous
               , diff
 
+	    console.log('[RATE] %s', app.rateLimit)
             var maybeNext = team.chain(function (t) {
                     var previous = timingCache[t.name]
                     timingCache[t.name] = now
@@ -26,7 +24,7 @@
                 .chain(function (p) {
                     diff = now - p
 
-                    return diff < rateLimit
+                    return diff < app.rateLimit
                         ? Maybe.just(function () {
                             res.status(420).send(new FormattedError('rate limit exceeded'))
                         })

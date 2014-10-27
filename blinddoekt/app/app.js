@@ -4,12 +4,13 @@
     var lang           = require('./lang')
       , FormattedError = require('./error')
 
-    var App = function (routes, team, mapping) {
+    var App = function (routes, team, mapping, config) {
         this.teams = []
         this.routes = routes
         this.team = team
         this.mapping = mapping
         this.map = mapping.generate(64, 100)
+	this.rateLimit = config.rateLimit
     }
 
     App.prototype.configure = function configure (server) {
@@ -33,11 +34,18 @@
     }
 
     App.prototype.getView = function getView (navHash) {
-        var current = this.team.findByNav(this.teams, navHash)
+        var current = this.team.findByNav(this.teams, navHash), slice
 
         if (!current) return new FormattedError('you are not the navigator')
 
-        return this.mapping.encode(this.map.slice(current.location))
+	slice = this.map.slice(current.location)
+
+        return {
+	    lower: slice.lower,
+	    upper: slice.upper,
+	    encoding: this.mapping.encode(slice),
+	    location: current.location
+	}
     }
 
     App.prototype.applySteps = function applySteps (hash, steps) {
@@ -48,7 +56,7 @@
         res = this.map.traverse(current.location, steps)
         current.location = res.position
 
-        return res.remaining
+        return res
     }
 
     App.prototype.getLocation = function getLocation (navHash) {

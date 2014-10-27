@@ -209,3 +209,128 @@ It also has the implementation of the map encoding, and a simple
 breadth first search through the map (to ensure an actual path
 exists!) which you can probably steal/reverse engineer into something
 that would work to traverse it.
+
+### Probably a not unreasonable approach to this
+
+Outside of actually installing node and registering your team,
+probably the first step to getting through this is getting a handle on
+the map data you have, and establishing and end-point your driver can
+hit to retrieve information from.
+
+The request API we're using uses Promises to give a relatively
+compositional approach to the asynchronous actions. If you don't know
+anything about Promises, the main thing you'll need to know is the
+`then` function to chain together promises. For example, the navigator
+will hit the /view endpoint on their local client, and it will make an
+HTTP request for the encoded state and return a promise that will
+resolve to the response [on this
+line](https://github.com/kjgorman/dojo/blob/fe075d0fadd382e8f053d168503331ef7da93a28/blinddoekt-client/app/app.js#L35).
+
+If you change it to look like this:
+
+```javascript
+if (client.view) {
+   return client.view().then(function (data) {
+       data = JSON.parse(data)
+       //data is now an object that looks like:
+       // {
+       //    location : { row: <int>, col: <int> },
+       //    lower : int,
+       //    upper : int,
+       //    encoding: [ 2147483648, 1... ]
+       // }
+
+       // so in here we can decode the input, update
+       // the current location, the current map etc.
+
+       // the data we return will just be echoed to the
+       // page, so you could e.g. format it to be human
+       // readable or something.
+       return data
+   })
+}
+```
+
+The `then` effectively says "when you get resolved to a value, invoke
+this function and return that result as a promise. If the value you
+return is _another_ promise it "flattens" them both to one promise. In
+this case we're just returning some data so it's a moot point, but the
+idea is that if you did e.g. another http request to your team member
+within the promise you wouldn't have the nesting problem that
+callbacks end up with.
+
+Anyway, at this point the navigator can do a request, get some data,
+perhaps save it locally then write some unit tests or something to
+figure out the decoding process.
+
+The next step is probably to make the current location and known map
+available to the driver.
+
+The navigator can add to their routes something like:
+
+```javascript
+server.get('/map', function (req, res) {
+    res.status(200).send(application.getUpdatedMap())
+})
+```
+
+then in their app.js:
+
+```javascript
+App.prototype.currentStatus = function currentStatus () {
+    // I assume in here that you set these scope variables
+    // to the `this` object in your `view` function, outlined
+    // above.
+
+    // you can decide here maybe what format and information
+    // you want to transfer to your team mate
+    return {
+        location: this.currentLocation,
+        map: this.currentMap
+    }
+}
+```
+
+The driver then has to update their application to query your new
+endpoint, starting from their routes.js (this isn't strictly
+necessary, but follows the pattern of allowing you to hit a url to
+perform actions, it could of course be driven by the server)
+
+```javascript
+server.get('/map', function (req, res) {
+    echo(res, application.getUpdatedMap())
+})
+```
+
+in their app.js:
+
+```javascript
+App.prototype.getUpdatedMap = function getUpdatedMap () {
+    var _this = this
+    // 'buddy' here is significant, it's a cached 'team' channel...
+    return this.client(this.teamMate, 'buddy').getUpdatedMap()
+               .then(function (data) {
+                   data = JSON.parse(data)
+                   // now you have the data on the driver side, e.g.
+                   // data will have `location` and `map`, if that's what
+                   // was sent, as it is in the above example
+
+                   _this.lastKnownLocation = data.location
+                   return data
+               }
+}
+```
+
+Finally in the client.js add an actual request to the client
+
+```javascript
+Client.prototype.getUpdatedMap = function getUpdatedMap () {
+    return rp({
+        uri: this.apiBase + '/map',
+        method: 'GET'
+    })
+}
+```
+
+So now the driver should be able to visit `http://localhost:3002/map`
+and it should call through to the navigator and return the actual map

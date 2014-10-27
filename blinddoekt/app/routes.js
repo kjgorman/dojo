@@ -31,6 +31,12 @@
 
             res.status(200).send(result)
         })
+
+	server.get('/debug/rate/:amount', function (req, res) {
+	    app.rateLimit = parseInt(req.params.amount, 10)
+
+	    res.status(200).send('rate limit updated to '+app.rateLimit)
+	})
     }
 
     module.exports = { configure: configure };

@@ -9,11 +9,11 @@ var chalk     = require('chalk')
   , teams     = require('./app/team')
   , blindkoet = require('./app/app')
   , server    = express()
-  , app       = new blindkoet(routes, teams, mapping)
+  , app       = new blindkoet(routes, teams, mapping, config)
 
 server.use(parser.json())
 server.use(logging)
-server.use(rateLimit(app, config))
+server.use(rateLimit(app))
 
 app.configure(server)
 

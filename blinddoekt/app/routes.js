@@ -15,7 +15,7 @@
         })
 
         server.put('/:hash/step', function (req, res) {
-            var result = app.applySteps(req.body)
+            var result = app.applySteps(req.params.hash, req.body)
 
             return res.status(200).send(result)
         });

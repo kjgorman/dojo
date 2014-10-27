@@ -174,3 +174,38 @@ is obviously crucial!
 
 Anyway, that basically summarises it, as the navigator you store the
 map and the position, and pass it on to the driver as is necessary.
+
+#### Both of you
+
+So obviously the point of this being a blind-folded race is that you
+only have partial knowledge at a time and need to share that between
+one another.
+
+This means you need to decide on a format for the map the navigator
+passes to the driver (e.g. the navigator could decode the integers
+back into a 2d array of 0s and 1s, and send you a position coordinate,
+or they could perhaps actually encode a graph structure with an
+adjacency matrix or something with relative movement encoded in the
+edges).
+
+You also need to figure out how to tell one another when an action has
+happened (i.e. the driver sends a PUT, and tells the navigator to
+update their position and map). This could just be manual at the
+beginning, i.e. you actually turn around and ask them to update in
+real life, but it would be cool to get a feedback loop running between
+the servers as well.
+
+### I have no idea what's going on
+
+The actual server is also in the dojo folder, and can be run on local
+if you follow the same `npm install && node index.js dev.json`
+instructions.
+
+It also has some examples of how to write simple unit tests in node.js
+(I would recommend also installing mocha as a test runner using `npm
+install -g mocha`).
+
+It also has the implementation of the map encoding, and a simple
+breadth first search through the map (to ensure an actual path
+exists!) which you can probably steal/reverse engineer into something
+that would work to traverse it.

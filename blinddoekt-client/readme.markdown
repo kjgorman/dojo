@@ -333,4 +333,11 @@ Client.prototype.getUpdatedMap = function getUpdatedMap () {
 ```
 
 So now the driver should be able to visit `http://localhost:3002/map`
-and it should call through to the navigator and return the actual map
+and it should call through to the navigator and return the actual map.
+
+With that, you should now be able to follow those patterns to add any
+arbitrary endpoints to communicate between the two of you, as well as
+have just enough understanding of promises to use them properly. Which
+should be enough to complete at least some of this exercise.
+
+Good luck!

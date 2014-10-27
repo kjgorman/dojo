@@ -1,6 +1,7 @@
 var chalk     = require('chalk')
   , express   = require('express')
   , parser    = require('body-parser')
+  , config    = require('./' + (process.argv[2] || 'dev.json'))
   , logging   = require('./middleware/logging')
   , rateLimit = require('./middleware/throughput')
   , mapping   = require('./app/mapping')
@@ -12,7 +13,7 @@ var chalk     = require('chalk')
 
 server.use(parser.json())
 server.use(logging)
-server.use(rateLimit(app))
+server.use(rateLimit(app, config))
 
 app.configure(server)
 

@@ -56,6 +56,12 @@
         res = this.map.traverse(current.location, steps)
         current.location = res.position
 
+        if (current.location.row === this.map.cells.length) {
+            return {
+                success: 'success! you reached the end... sorry there\'s no prize tho'
+            }
+        }
+
         return res
     }
 

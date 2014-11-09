@@ -18,4 +18,8 @@ class Colour
     @green > @blue and @green > @blue
   end
 
+  def eq? other
+    @red.eq? other.red and @blue.eq? other.blue and @green.eq? other.green
+  end
+
 end

@@ -9,11 +9,17 @@ class Importer
   def import file_stream
     contents = file_stream.read
 
-    result = @converter.convert contents
+    lines = contents.split '\n'
+
+    result = lines.map { |l| @converter.convert l }
 
     Recorder.new.record_order result
 
-    result
+    if result.length > 1
+      result
+    else
+      result.at 0
+    end
   end
 
 end

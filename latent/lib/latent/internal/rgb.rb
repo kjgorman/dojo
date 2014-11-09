@@ -1,7 +1,6 @@
 class Rgb
 
-  require File.join 'paint', 'paint'
-  require File.join 'paint', 'colour'
+  ['paint', 'colour'].each { |f| require (File.join 'paint', f ) }
 
   def convert contents
     components = contents.split ','

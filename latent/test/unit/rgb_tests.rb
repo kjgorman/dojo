@@ -15,7 +15,7 @@ describe 'it can import rgb formatted files' do
 
     order = importer.import mock
 
-    assert_equal(0, order.volume)
+    assert_equal nil, order
   end
 
   it 'should be able to interpret a volume, regardless of colour' do
@@ -81,7 +81,7 @@ describe 'it can import rgb formatted files' do
     assert order.colour.is_blue
   end
 
-  it 'should likewise be able to discren green from blue' do
+  it 'should likewise be able to discern green from blue' do
     importer = Latent::UseCases.rgb
     mock = MockFile.new '10,0,255,0'
 
@@ -108,5 +108,46 @@ describe 'it can import rgb formatted files' do
 
     assert_equal 0, order.volume
     assert order.colour.is_red
+  end
+
+  it 'should not record an order (if the volume is zero)' do
+    importer = Latent::UseCases.rgb
+    mock = MockFile.new '0,255,0,0'
+
+    order = importer.import mock
+
+    assert_equal 0, order.volume
+    # TODO
+    # how can we assert no order was recorded tho?
+  end
+
+  it 'should be able to take multiple orders when spread across multiple lines' do
+    importer = Latent::UseCases.rgb
+    mock = MockFile.new '5,255,0,0\n5,255,0,0'
+
+    order = importer.import mock
+
+    assert_equal 2, order.length
+    assert (order.at 0).colour.is_red
+    assert (order.at 1).colour.is_red
+    assert 5, (order.at 0).volume
+  end
+
+  it 'should record the overall order as the sum of the consituent colours' do
+    importer = Latent::UseCases.rgb
+    mock = MockFile.new '5,255,0,0\n5,255,0,0'
+
+    order = importer.import mock
+
+    # TODO, how to make assertions about the order recorder
+  end
+
+  it 'should record the overall orders for each separate colour imported' do
+    importer = Latent::UseCases.rgb
+    mock = MockFile.new '5,255,0,0\n5,0,255,0'
+
+    order = importer.import mock
+
+    # TODO, how to make assertions about the order recorder
   end
 end

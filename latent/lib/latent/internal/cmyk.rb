@@ -1,6 +1,6 @@
 class Cmyk
 
-  def import
+  def convert contents
     0
   end
 

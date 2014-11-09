@@ -9,14 +9,15 @@ class Importers
     end
   end
 
+  require 'importer'
   ['rgb', 'cmyk'].each { |f| require File.join 'internal', f }
 
   def make_importer type
     case type
     when :RGB
-      Rgb.new
+      Importer.new Rgb.new
     when :CMYK
-      Cmyk.new
+      Importer.new Cmyk.new
     else
       raise 'unknown importer type'
     end

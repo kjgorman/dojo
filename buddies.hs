@@ -2,11 +2,12 @@ module Buddies (buddies) where
 
 import System.Environment (getArgs)
 import System.Random (randomRIO)
-import Control.Monad (liftM)
+import Control.Monad (liftM, join, (>=>))
+import Data.List (intersect)
 import Data.Maybe (maybeToList)
 
-pairs :: [String] -> [(String, String)]
-pairs people = [(x, y) | x <- people, y <- people, x /= y]
+pairs :: [String] -> [[String]]
+pairs people = [[x, y] | x <- people, y <- people, x /= y]
 
 pick :: [a] -> IO (Maybe a)
 pick [] = return Nothing
@@ -19,14 +20,10 @@ pickWhere xs pred = do
     maybeChoice <- pick xs
     return $ do
         x <- maybeChoice
-	if pred x then Just x else Nothing 
+	if pred x then Just x else Nothing
 
-flatten :: [(a, a)] -> [a]
-flatten ps = ps >>= (\(x, y) -> [x, y])
-
-notBuddies :: (String, String) -> [(String, String)] -> Bool
-notBuddies p acc = not $ isPaired (fst p) || isPaired (snd p)
-		    where isPaired x = x `elem` (flatten acc)
+notBuddies :: [String] -> [[String]] -> Bool
+notBuddies p = null . intersect p . join
 
 choose :: Eq a => Int -> [a] -> (a -> [a] -> Bool) -> IO [a]
 choose 0 _ _ = return []
@@ -40,13 +37,21 @@ choose' n src pred acc = do
         Nothing -> choose' n src pred acc
     	(Just p) -> choose' (n-1) src pred (p:acc)
 
-buddies :: [String] -> IO (Either String [(String, String)])
-buddies s = if length s `mod` 2 /= 0
-            then return . Left $ "Uneven buddies :( someone will need to be a three"
-            else liftM Right $ choose (length s `div` 2) (pairs s) notBuddies
+oddOneOut :: [String] -> ([String], Maybe String)
+oddOneOut ts = if length ts `mod` 2 /= 0
+               then (tail ts, Just $ head ts)
+               else (ts, Nothing)
+
+allocateLoner :: String -> [[String]] -> [[String]]
+allocateLoner s [] = [[s]]
+allocateLoner s (x:xs) = (s:x):xs
+
+buddies :: [String] -> IO [[String]]
+buddies s = let (people, loner) = oddOneOut s
+                assigned = choose (length people `div` 2) (pairs people) notBuddies
+            in case loner of
+              Nothing -> assigned
+              Just s -> liftM (allocateLoner s) assigned
 
 main :: IO ()
-main = do
-  args <- getArgs
-  buds <- buddies args
-  print buds
+main = getArgs >>= (buddies >=> print)

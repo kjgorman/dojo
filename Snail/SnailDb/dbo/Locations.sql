@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Locations]
+(
+	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
+    [CountryName] NVARCHAR(255) NOT NULL, 
+    [PortName] NVARCHAR(255) NOT NULL
+)

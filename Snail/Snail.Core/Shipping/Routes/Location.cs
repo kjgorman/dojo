@@ -1,5 +1,8 @@
-﻿namespace Snail.Core.Shipping.Routes
+﻿using System;
+
+namespace Snail.Core.Shipping.Routes
 {
+    [Serializable]
     public class Location
     {
         public readonly long LocationId;

@@ -7,6 +7,8 @@ namespace Snail.Adapters.Maps
     {
         public LocationMap()
         {
+            Table("Locations");
+
             Id(x => x.Id);
             Map(x => x.CountryName);
             Map(x => x.PortName);

@@ -1,0 +1,7 @@
+﻿CREATE USER [SnailUser]
+	FOR LOGIN [SnailUser]
+	WITH DEFAULT_SCHEMA = dbo
+
+GO
+
+GRANT CONNECT TO [SnailUser]

@@ -59,12 +59,14 @@
     <Folder Include="Properties" />
     <Folder Include="dbo" />
     <Folder Include="reference" />
+    <Folder Include="dbo\Security" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Locations.sql" />
     <None Include="reference\Locations.sql" />
-    <Build Include="SnailUser.sql" />
-    <Build Include="dbo\SnailLogin.sql" />
+    <Build Include="Permissions.sql" />
+    <Build Include="dbo\Security\SnailLogin.sql" />
+    <Build Include="dbo\Security\SnailUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

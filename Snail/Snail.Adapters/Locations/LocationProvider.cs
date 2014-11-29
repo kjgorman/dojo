@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using NHibernate.Linq;
 using Snail.Adapters.DataAccess;
 using Snail.Adapters.Model;
@@ -14,22 +16,52 @@ namespace Snail.Adapters.Locations
         {
             return Session
                 .Query<LocationModel>()
-                .Select(m => new Location(m.Id, m.CountryName, m.PortName));
+                .Select(Map);
         }
 
         public Location ById(long locationId)
         {
-            throw new System.NotImplementedException();
+            return Map(Session.Get<LocationModel>(locationId));
         }
 
-        public IEnumerable<Location> ByCity(string cityName)
+        public IEnumerable<Location> ByCountry(string countryName)
         {
-            throw new System.NotImplementedException();
+            return ByPredicate(CountryPredicate(countryName));
         }
 
         public IEnumerable<Location> ByPort(string portName)
         {
-            throw new System.NotImplementedException();
+            return ByPredicate(PortPredicate(portName));
+        }
+
+        public IEnumerable<Location> ByExactLocation(string countryName, string portName)
+        {
+            return ByPredicate(
+                x => CountryPredicate(countryName).Compile()(x) && PortPredicate(portName).Compile()(x));
+        }
+
+        private static Expression<Func<LocationModel, bool>> CountryPredicate(string countryName)
+        {
+            return x => x.CountryName == countryName;
+        }
+
+        private static Expression<Func<LocationModel, bool>> PortPredicate(string portName)
+        {
+            return x => x.PortName == portName;
+        }
+
+        private IEnumerable<Location> ByPredicate(Expression<Func<LocationModel, bool>> predicate)
+        {
+            return Session
+                .QueryOver<LocationModel>()
+                .Where(predicate)
+                .Future<LocationModel>()
+                .Select(Map);
+        }
+
+        private static Location Map(LocationModel model)
+        {
+            return new Location(model.Id, model.CountryName, model.PortName);
         }
     }
 }

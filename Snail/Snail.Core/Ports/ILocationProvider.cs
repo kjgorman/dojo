@@ -19,11 +19,11 @@ namespace Snail.Core.Ports
         Location ById(long locationId);
 
         /// <summary>
-        /// All locations in the specified city
+        /// All locations in the specified country
         /// </summary>
-        /// <param name="cityName"></param>
+        /// <param name="countryName"></param>
         /// <returns></returns>
-        IEnumerable<Location> ByCity(string cityName);
+        IEnumerable<Location> ByCountry(string countryName);
 
         /// <summary>
         /// All locations within the specified port
@@ -31,5 +31,13 @@ namespace Snail.Core.Ports
         /// <param name="portName"></param>
         /// <returns></returns>
         IEnumerable<Location> ByPort(string portName);
+
+        /// <summary>
+        /// All locations with the exact country and port
+        /// </summary>
+        /// <param name="countryName"></param>
+        /// <param name="portName"></param>
+        /// <returns></returns>
+        IEnumerable<Location> ByExactLocation(string countryName, string portName);
     }
 }

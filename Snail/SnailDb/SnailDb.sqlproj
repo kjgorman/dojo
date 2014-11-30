@@ -73,7 +73,6 @@
     <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SnailDb.publish.xml" />
     <None Include="local.publish.xml" />
     <None Include="reference\Legs.sql" />
   </ItemGroup>

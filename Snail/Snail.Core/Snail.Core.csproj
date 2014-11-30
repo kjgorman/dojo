@@ -49,6 +49,7 @@
     <Compile Include="Lang\EnumerableExtensions.cs" />
     <Compile Include="Lang\Validation\EnumerableExtensions.cs" />
     <Compile Include="Lang\Validation\Exceptions\ArgumentValidationException.cs" />
+    <Compile Include="Ports\ILegProvider.cs" />
     <Compile Include="Ports\ILocationProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shipping\Cargo.cs" />

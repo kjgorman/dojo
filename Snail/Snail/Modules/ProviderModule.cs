@@ -1,5 +1,5 @@
 ﻿using Ninject.Modules;
-using Snail.Adapters.Locations;
+using Snail.Adapters.Providers;
 using Snail.Core.Ports;
 
 namespace Snail.Modules
@@ -9,6 +9,7 @@ namespace Snail.Modules
         public override void Load()
         {
             Bind<ILocationProvider>().To<LocationProvider>().InSingletonScope();
+            Bind<ILegProvider>().To<LegProvider>().InSingletonScope();
         }
     }
 }

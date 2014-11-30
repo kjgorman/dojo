@@ -8,7 +8,7 @@ using Snail.Adapters.Model;
 using Snail.Core.Ports;
 using Snail.Core.Shipping.Routes;
 
-namespace Snail.Adapters.Locations
+namespace Snail.Adapters.Providers
 {
     public class LocationProvider : AccessBase, ILocationProvider
     {

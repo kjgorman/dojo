@@ -50,7 +50,10 @@
   <ItemGroup>
     <Compile Include="DataAccess\AccessBase.cs" />
     <Compile Include="DataAccess\SessionFactory.cs" />
-    <Compile Include="Locations\LocationProvider.cs" />
+    <Compile Include="Maps\LegMap.cs" />
+    <Compile Include="Model\LegModel.cs" />
+    <Compile Include="Providers\LegProvider.cs" />
+    <Compile Include="Providers\LocationProvider.cs" />
     <Compile Include="Maps\LocationMap.cs" />
     <Compile Include="Model\LocationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

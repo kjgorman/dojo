@@ -11,3 +11,4 @@ Post-Deployment Script Template
 */
 
 :r .\reference\Locations.sql
+:r .\reference\Legs.sql

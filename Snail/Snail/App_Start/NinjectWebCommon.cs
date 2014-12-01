@@ -67,6 +67,6 @@ namespace Snail.App_Start
             {
                 new ProviderModule()
             });
-        }        
+        }
     }
 }

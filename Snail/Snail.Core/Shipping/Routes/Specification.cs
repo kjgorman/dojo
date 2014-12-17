@@ -1,22 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Snail.Core.Shipping.Routes
+﻿namespace Snail.Core.Shipping.Routes
 {
     public class Specification
     {
         private readonly Location _origin;
         private readonly Location _destination;
-        private readonly HashSet<Location> _impassableCustoms;
 
         public Specification(Location origin
-                           , Location destination
-                           , IEnumerable<Location> impassableCustoms = null)
+                           , Location destination)
         {
-            _origin = origin;
+            _origin      = origin;
             _destination = destination;
-            _impassableCustoms = new HashSet<Location>(impassableCustoms ?? Enumerable.Empty<Location>());
         }
+
+        public Location Origin { get { return _origin; }}
 
         public bool SatisfiedBy(Itinerary itinerary)
         {
@@ -24,12 +20,7 @@ namespace Snail.Core.Shipping.Routes
 
             return itinerary.Traverse(this);
         }
-
-        public bool CanVisit(Location to)
-        {
-            return false == _impassableCustoms.Contains(to);
-        }
-
+        
         public bool EndsWith(Location to)
         {
             return _destination.Equals(to);

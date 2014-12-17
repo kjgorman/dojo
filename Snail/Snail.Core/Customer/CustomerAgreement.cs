@@ -1,14 +1,17 @@
-﻿using Snail.Core.Shipping.Routes;
+﻿using Snail.Core.Billing;
+using Snail.Core.Shipping.Routes;
 
 namespace Snail.Core.Customer
 {
     public class CustomerAgreement
     {
-        private readonly Specification _routeSpecification;
+        private readonly PricingModel _pricing;
+        public Specification Specification { get; private set; }
 
-        public CustomerAgreement(Specification routeSpecification)
+        public CustomerAgreement(Specification routeSpecification, PricingModel pricing)
         {
-            _routeSpecification = routeSpecification;
+            _pricing = pricing;
+            Specification = routeSpecification;
         }
     }
 }

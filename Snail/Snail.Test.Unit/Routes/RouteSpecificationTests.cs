@@ -31,20 +31,5 @@ namespace Snail.Test.Unit.Routes
 
             Assert.That(route.SatisfiedBy(itinerary));
         }
-
-        [Test]
-        public void Constraint_RouteSpecificationWithAnUnpassableCustomsBarrierWillBeUnsatisfiableByNaiveItinerary()
-        {
-            var origin = Locations.Somewhere();
-            var unreachable = origin.SomewhereElse();
-            var destination = unreachable.SomewhereElse();
-
-            var itinerary = new Itinerary(Enumerable.Empty<HandlingStep>()
-                                        , Legs.Between(origin, unreachable).Then(destination));
-
-            var route = new Specification(origin, destination, new [] { unreachable });
-
-            Assert.That(route.SatisfiedBy(itinerary), Is.False);
-        }
     }
 }

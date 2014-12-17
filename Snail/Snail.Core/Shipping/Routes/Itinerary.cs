@@ -28,8 +28,6 @@ namespace Snail.Core.Shipping.Routes
             {
                 var next = steps.Dequeue();
 
-                if (false == specification.CanVisit(next.To)) return false;
-
                 if (specification.EndsWith(next.To)) return true;
             }
 

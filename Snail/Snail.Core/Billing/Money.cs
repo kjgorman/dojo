@@ -8,5 +8,8 @@
         {
             _currency = currency;
         }
+
+        //TODO, where does the actual money come into it?
+        public static Money Unlimited { get { return new Money(new Currency());} }
     }
 }

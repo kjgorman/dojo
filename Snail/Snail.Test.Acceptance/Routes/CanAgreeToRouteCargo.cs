@@ -4,31 +4,38 @@ namespace Snail.Test.Acceptance.Routes
 {
     public class CanAgreeToRouteCargo
     {
+        private readonly RouteInteractor _interactor = new RouteInteractor();
+
         [Test]
         public void CanAgreeWithACustomerToRouteSomeCargo()
         {
-            Given_a_customer_who_can_pay_all_custom_fees();
+            Given_a_customer_who_can_pay_all_custom_fees_on_legs_between_athens_and_malaga();
 
-            Shipping_some_cargo_from_athens_to_malaga();
+            Shipping_some_cargo_between_the_two();
 
-            Should_produce_a_route_specification_with_no_customs_restrictions();
+            Should_produce_an_itinerary_directly_between_the_two();
         }
 
-        // TEST: should have an interrogable itinerary
+        // TEST: can figure out custom restrictions
+        // TEST: can figure out cost thresholds
 
-        private void Should_produce_a_route_specification_with_no_customs_restrictions()
+        private void Given_a_customer_who_can_pay_all_custom_fees_on_legs_between_athens_and_malaga()
         {
-            // TODO
+            _interactor.SetupLegsBetween("Greece", "Athens", "Spain", "Malaga");
         }
 
-        private void Shipping_some_cargo_from_athens_to_malaga()
+        private void Shipping_some_cargo_between_the_two()
         {
-            //TODO
+            _interactor.BuildRoute();
         }
 
-        private void Given_a_customer_who_can_pay_all_custom_fees()
+        private void Should_produce_an_itinerary_directly_between_the_two()
         {
-            // TODO
+            var actual = _interactor.GetRoute();
+            var spec   = _interactor.GetSpec();
+
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(spec.SatisfiedBy(actual), Is.True);
         }
     }
 }

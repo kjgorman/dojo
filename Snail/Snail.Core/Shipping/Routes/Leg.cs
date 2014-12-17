@@ -11,6 +11,7 @@ namespace Snail.Core.Shipping.Routes
 
         public Leg(Location @from, Location to, long legId)
         {
+            // TODO – this should probably have an associated cost function?
             To    = to;
             From  = @from;
             LegId = legId;

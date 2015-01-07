@@ -1,3 +1,4 @@
+using Ninject.Modules;
 using Snail.Modules;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Snail.App_Start.NinjectWebCommon), "Start")]
@@ -63,9 +64,10 @@ namespace Snail.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Load(new []
+            kernel.Load(new INinjectModule[]
             {
-                new ProviderModule()
+                new ProviderModule(),
+                new BoxingModule() 
             });
         }
     }

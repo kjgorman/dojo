@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using NHibernate.Linq;
 using Snail.Adapters.DataAccess;
 using Snail.Adapters.Model;
 using Snail.Core.Ports;
@@ -10,34 +8,38 @@ using Snail.Core.Shipping.Routes;
 
 namespace Snail.Adapters.Providers
 {
-    public class LocationProvider : AccessBase, ILocationProvider
+    public class LocationProvider : ILocationProvider
     {
+        private readonly IBoxingQuery<LocationModel, Location> _query;
+
+        public LocationProvider(IBoxingQuery<LocationModel, Location> query)
+        {
+            _query = query;
+        }
+
         public IEnumerable<Location> All()
         {
-            return Session
-                .Query<LocationModel>()
-                .Select(Map);
+            return _query.All();
         }
 
         public Location ById(long locationId)
         {
-            return Map(Session.Get<LocationModel>(locationId));
+            return _query.Get(locationId);
         }
 
         public IEnumerable<Location> ByCountry(string countryName)
         {
-            return ByPredicate(CountryPredicate(countryName));
+            return _query.ByPredicate(CountryPredicate(countryName));
         }
 
         public IEnumerable<Location> ByPort(string portName)
         {
-            return ByPredicate(PortPredicate(portName));
+            return _query.ByPredicate(PortPredicate(portName));
         }
 
         public IEnumerable<Location> ByExactLocation(string countryName, string portName)
         {
-            return ByPredicate(
-                x => CountryPredicate(countryName).Compile()(x) && PortPredicate(portName).Compile()(x));
+            return _query.ByPredicate(x => x.CountryName == countryName && x.PortName == portName);
         }
 
         private static Expression<Func<LocationModel, bool>> CountryPredicate(string countryName)
@@ -48,15 +50,6 @@ namespace Snail.Adapters.Providers
         private static Expression<Func<LocationModel, bool>> PortPredicate(string portName)
         {
             return x => x.PortName == portName;
-        }
-
-        private IEnumerable<Location> ByPredicate(Expression<Func<LocationModel, bool>> predicate)
-        {
-            return Session
-                .QueryOver<LocationModel>()
-                .Where(predicate)
-                .Future<LocationModel>()
-                .Select(Map);
         }
 
         private static Location Map(LocationModel model)

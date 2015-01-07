@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\AccessBase.cs" />
+    <Compile Include="DataAccess\Query.cs" />
     <Compile Include="DataAccess\SessionFactory.cs" />
     <Compile Include="Maps\LegMap.cs" />
     <Compile Include="Model\LegModel.cs" />

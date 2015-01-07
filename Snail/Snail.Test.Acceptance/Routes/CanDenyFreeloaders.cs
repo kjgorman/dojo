@@ -4,6 +4,7 @@ namespace Snail.Test.Acceptance.Routes
 {
     public class CanDenyFreeloaders
     {
+        [Ignore]
         [Test]
         public void CanRefuseToRouteCargoForACustomerWhoCantPayAnything()
         {

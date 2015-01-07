@@ -39,12 +39,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\MockQuery.cs" />
     <Compile Include="Lang\Extensions\LocationExtensions.cs" />
     <Compile Include="Lang\Legs.cs" />
     <Compile Include="Lang\Locations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Snail.Adapters\Snail.Adapters.csproj">
+      <Project>{22ebe062-c852-4601-a5c5-2a435bff9bb0}</Project>
+      <Name>Snail.Adapters</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Snail.Core\Snail.Core.csproj">
       <Project>{17f77c80-a594-4d53-96d9-b0e6a5238e34}</Project>
       <Name>Snail.Core</Name>

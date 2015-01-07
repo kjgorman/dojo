@@ -11,7 +11,7 @@ namespace Snail.Test.Unit.Routes
         [Test]
         public void Degenerate_SpecificationWithSameDestinationAsOriginIsSatisfiedByEmptyItinerary()
         {
-            var location = Locations.Somewhere();
+            var location = Machinery.Lang.Locations.Somewhere();
             var route = new Specification(location, location);
             var itinerary = Itinerary.Empty();
 
@@ -21,8 +21,8 @@ namespace Snail.Test.Unit.Routes
         [Test]
         public void Visitor_SpecificationWithAStepIsSatisfiedByAnItineraryWithALegBetweenThem()
         {
-            var origin = Locations.Somewhere();
-            var destination = Locations.Somewhere().SomewhereElse();
+            var origin = Machinery.Lang.Locations.Somewhere();
+            var destination = Machinery.Lang.Locations.Somewhere().SomewhereElse();
 
             var itinerary = new Itinerary(Enumerable.Empty<HandlingStep>()
                                         , Legs.Between(origin, destination));

@@ -96,3 +96,9 @@ parameters. How easy is it to now remove one of the parameters?
 
 Can you generalise the solution to provide a search capability to
 the legs controller/provider as well?
+
+The second part, which I feel we might not get to, is extending the
+routing system to have a concept of "cost", such that a customer
+agreement might be declined due to their inability to afford any
+available route. This one is a more free-form problem, and is defined
+only in terms of an unimplemented acceptance test (`Snail.Test.Acceptance.Routes.CanDenyFreeLoaders`).

@@ -68,6 +68,9 @@
     <Build Include="dbo\Security\SnailLogin.sql" />
     <Build Include="dbo\Security\SnailUser.sql" />
     <Build Include="dbo\Legs.sql" />
+    <Build Include="dbo\Documents.sql" />
+    <Build Include="dbo\DocumentType.sql" />
+    <Build Include="dbo\Customer.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
@@ -75,6 +78,9 @@
   <ItemGroup>
     <None Include="local.publish.xml" />
     <None Include="reference\Legs.sql" />
+    <None Include="reference\DocumentTypes.sql" />
+    <None Include="reference\Documents.sql" />
+    <None Include="reference\Customer.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SnailDb.refactorlog" />

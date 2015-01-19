@@ -10,6 +10,7 @@ namespace Snail.Modules
         {
             Bind<ILocationProvider>().To<LocationProvider>().InSingletonScope();
             Bind<ILegProvider>().To<LegProvider>().InSingletonScope();
+            Bind<IQuoteProvider>().To<QuoteProvider>().InSingletonScope();
         }
     }
 }

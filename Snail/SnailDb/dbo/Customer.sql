@@ -1,0 +1,4 @@
+﻿CREATE TABLE [dbo].[Customer]
+(
+	[Id] BIGINT NOT NULL PRIMARY KEY
+)

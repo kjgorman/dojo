@@ -51,13 +51,17 @@
     <Compile Include="DataAccess\AccessBase.cs" />
     <Compile Include="DataAccess\Query.cs" />
     <Compile Include="DataAccess\SessionFactory.cs" />
+    <Compile Include="Http\DocumentParameters.cs" />
+    <Compile Include="Maps\DocumentMap.cs" />
     <Compile Include="Maps\LegMap.cs" />
+    <Compile Include="Model\DocumentModel.cs" />
     <Compile Include="Model\LegModel.cs" />
     <Compile Include="Providers\LegProvider.cs" />
     <Compile Include="Providers\LocationProvider.cs" />
     <Compile Include="Maps\LocationMap.cs" />
     <Compile Include="Model\LocationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\QuoteProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Snail.Core\Snail.Core.csproj">

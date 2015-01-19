@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\MockQuery.cs" />
+    <Compile Include="Http\FakeRequestParameters.cs" />
     <Compile Include="Lang\Extensions\LocationExtensions.cs" />
     <Compile Include="Lang\Legs.cs" />
     <Compile Include="Lang\Locations.cs" />

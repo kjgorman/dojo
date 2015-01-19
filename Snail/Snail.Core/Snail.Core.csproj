@@ -40,7 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Billing\Currency.cs" />
-    <Compile Include="Billing\Invoice.cs" />
+    <Compile Include="Billing\Documents\BillOfLading.cs" />
+    <Compile Include="Billing\Documents\DocumentType.cs" />
+    <Compile Include="Billing\Documents\IDocument.cs" />
+    <Compile Include="Billing\Documents\Quote.cs" />
+    <Compile Include="Billing\Documents\Receipt.cs" />
+    <Compile Include="Billing\Issuer.cs" />
     <Compile Include="Billing\Money.cs" />
     <Compile Include="Billing\PricingModel.cs" />
     <Compile Include="Customer\Contact.cs" />
@@ -49,8 +54,11 @@
     <Compile Include="Lang\EnumerableExtensions.cs" />
     <Compile Include="Lang\Validation\EnumerableExtensions.cs" />
     <Compile Include="Lang\Validation\Exceptions\ArgumentValidationException.cs" />
+    <Compile Include="Ports\Exceptions\RequiredParameterNotProvided.cs" />
+    <Compile Include="Ports\IDocumentParameters.cs" />
     <Compile Include="Ports\ILegProvider.cs" />
     <Compile Include="Ports\ILocationProvider.cs" />
+    <Compile Include="Ports\IQuoteProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shipping\Cargo.cs" />
     <Compile Include="Shipping\HazMatCode.cs" />

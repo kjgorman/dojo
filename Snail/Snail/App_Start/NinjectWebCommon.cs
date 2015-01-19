@@ -67,7 +67,8 @@ namespace Snail.App_Start
             kernel.Load(new INinjectModule[]
             {
                 new ProviderModule(),
-                new BoxingModule() 
+                new BoxingModule(),
+                new CreationModule()
             });
         }
     }

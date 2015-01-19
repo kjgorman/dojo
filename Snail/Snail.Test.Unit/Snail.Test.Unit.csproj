@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Issuing\IssuerTests.cs" />
     <Compile Include="Locations\GetLocationsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routes\RouteSpecificationTests.cs" />

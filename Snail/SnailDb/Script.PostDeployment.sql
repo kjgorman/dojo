@@ -12,3 +12,6 @@ Post-Deployment Script Template
 
 :r .\reference\Locations.sql
 :r .\reference\Legs.sql
+:r .\reference\DocumentTypes.sql
+:r .\reference\Customer.sql
+:r .\reference\Documents.sql

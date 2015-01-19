@@ -6,5 +6,6 @@ namespace Snail.Core.Ports
     public interface IQuoteProvider
     {
         IEnumerable<Quote> All();
+        Quote ById(long quoteId);
     }
 }

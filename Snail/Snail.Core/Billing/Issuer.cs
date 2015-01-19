@@ -11,6 +11,13 @@ namespace Snail.Core.Billing
 
     public class Issuer : IIssuer
     {
+        private readonly IQuoteProvider _quoteProvider;
+
+        public Issuer(IQuoteProvider quoteProvider)
+        {
+            _quoteProvider = quoteProvider;
+        }
+
         public IDocument IssueDocument(DocumentType type, IDocumentParameters parameters)
         {
             // common parameters, assume if we don't have these in parameters it will throw
@@ -48,11 +55,34 @@ namespace Snail.Core.Billing
 
             if (type == DocumentType.BillOfLading)
             {
-                var shipmentDate = parameters.ShipmentDate();
+                var shipmentDate     = parameters.ShipmentDate();
+                var parentDocumentId = parameters.ParentDocumentId();
 
                 if (false == shipmentDate.HasValue)
                 {
                     throw new InvalidOperationException("You cannot create a bill of lading for something that has not been shipped");
+                }
+
+                if (false == parentDocumentId.HasValue)
+                {
+                    throw new InvalidOperationException("You can only create a bill of lading when it references its parent quote");
+                }
+
+                var parentQuote = _quoteProvider.ById(parentDocumentId.Value);
+
+                if (parentQuote == null)
+                {
+                    throw new InvalidOperationException("A bill of ladings parent document id must already exist before the bill is created");
+                }
+
+                if (parentQuote.CustomerId != customerId)
+                {
+                    throw new InvalidOperationException("The bill of ladings's parent document must refer to the same customer!");
+                }
+
+                if (parentQuote.ShipmentDate > issueDate)
+                {
+                    throw new InvalidOperationException("The bill of lading must be before or on the day of shipment");
                 }
 
                 return new BillOfLading

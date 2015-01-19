@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Snail.Adapters.DataAccess;
 using Snail.Adapters.Model;
 using Snail.Core.Billing.Documents;
@@ -18,6 +19,11 @@ namespace Snail.Adapters.Providers
         public IEnumerable<Quote> All()
         {
             return _query.ByPredicate(model => model.Type == DocumentType.Quote);
+        }
+
+        public Quote ById(long quoteId)
+        {
+            return _query.ByPredicate(model => model.Type == DocumentType.Quote && model.Id == quoteId).FirstOrDefault();
         }
     }
 }

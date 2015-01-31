@@ -117,14 +117,14 @@ and thus be able to compose and mutate programs solely through addition
 and deletion of objects, not through the manipulation of their internals.
 
 However, the precise definition of 'extension' in the principle is not
-particularly black and white, and indeed one needs only to look at 
+particularly black and white, and indeed one needs only to look at
 attempts to address the [expression problem](http://c2.com/cgi/wiki?ExpressionProblem)
 to see how it might be the case that extension without modification is
 in fact not possible with our current tools. Some solutions have been
 presented, notably Odersky's [Independently Extensible Solutions to
-the Expression Problem](http://scala-lang.org/docu/files/IC_TECH_REPORT_200433.pdf) 
+the Expression Problem](http://scala-lang.org/docu/files/IC_TECH_REPORT_200433.pdf)
 and Oliveira & Cook's [Extensibility for the Masses](https://www.cs.utexas.edu/~wcook/Drafts/2012/ecoop2012.pdf)
-(both of which I'd recommend reading, although they're not strictly 
+(both of which I'd recommend reading, although they're not strictly
 necessary for this problem).
 
 In object-oriented systems polymorphism typically grants us one
@@ -146,7 +146,7 @@ In our system we say a relation with a customer proceeds as follows:
 
 * A quote is issued to a customer suggesting an amount and shipment
   date
-* After a quote is accepted a bill of lading is issued for the 
+* After a quote is accepted a bill of lading is issued for the
   cargo to be shipped
 * Once cargo has been delivered, the bill of lading is exchanged
   along with payment for a receipt
@@ -196,3 +196,39 @@ be nice if it was possible to retain the `IssueDocument` signature
 and only refactor internals, but perhaps you think that signature
 is sufficiently rubbish that you must also change that in order to
 get something sensible running, it's up to you.
+
+### Issue #3 Liskov Substitution Principle
+
+> If for each object o1 of type S there is an object o2 of type T such
+> that for all programs P defined in terms of T, the behavior of P is
+> unchanged when o1 is substituted for o2 then S is a subtype of T
+
+Barbara Liskov introduced her substitution principle in her talk [Data
+abstraction and
+hierarchy](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.12.819&rep=rep1&type=pdf).
+It says that if one type is a subtype of another, then any property
+provable about the supertype must also be provable on the subtype.
+
+This is a strong behavioural subtyping relationship, and one that is
+purely semantic (i.e. we cannot have a compiler that can syntactically
+determine if a subtyping relation violates LSP, except in trivial
+cases). It has some important implications on the pre and post
+conditions of methods that are defined in a base class and hidden by a
+deriving class, namely:
+
+* Preconditions cannot be strengthened by the subtype (that is,
+  arguments must be contravariant with respect to the super type)
+* Postconditions cannot be weakened by the subtype (this is, return values
+  must be covariant with respect to the super type)
+
+Additionally, it is important for the subtype to ensure any invariants
+of the supertype are maintained, which means that we can substitute
+the deriving anywhere a base instance is used and maintain program
+correctness.
+
+Ensuring these conditions are met, and are continued to be met as the
+program evolves can be difficult, particularly when the base class
+must be modified, which leads to the [Fragile Base Class
+problem](http://c2.com/cgi/wiki?FragileBaseClassProblem). (Also,
+consider the relationship of the fragile base class problem and LSP to
+see how one might derive the open-closed principle).

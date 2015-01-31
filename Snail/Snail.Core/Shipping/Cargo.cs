@@ -12,5 +12,10 @@
             _weight = weight;
             _hazMatCode = hazMatCode;
         }
+
+        public bool IsHazardous
+        {
+            get { return _hazMatCode != HazMatCode.Harmless; }
+        }
     }
 }

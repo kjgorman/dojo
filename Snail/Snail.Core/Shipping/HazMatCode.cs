@@ -7,6 +7,8 @@
         Acetal                 = 1088,
         Acetalhyde             = 1089,
         //... etc ...
+        Harmless               = 0000,
+        //... etc ...
         ZincNitrate            = 1514,
         ZirconiumTetrachloride = 2503
     }

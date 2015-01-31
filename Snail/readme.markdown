@@ -232,3 +232,120 @@ must be modified, which leads to the [Fragile Base Class
 problem](http://c2.com/cgi/wiki?FragileBaseClassProblem). (Also,
 consider the relationship of the fragile base class problem and LSP to
 see how one might derive the open-closed principle).
+
+For this exercise, we're going to look at a pretty classic example of
+an inheritance structure that seems to make sense in natural language,
+but fails to satisfy Liskov's invariants: containers.
+
+Our cargo shipping container naturally has a variety of containers to
+cater to different kinds of cargo, so we started trying to model that
+in code. The initial (stupid) implementation introduces a
+`Container<T>`, that can hold a specified number of elements. Deriving
+from that we have `BasicContainer`, which just reifies the generic
+type of `Container<T>` to `Cargo`, but also strengthens a precondition
+on adding an item: no two pieces of cargo that are considered
+hazardous may be store adjacently. Then, deriving further from that we
+have a `FifoContainer` that (as the name suggests) should return
+elements in the order they were added (the basic container is LIFO).
+
+We begin with one failing test case for the `FifoContainer`, the fill
+factor is not being adjusted when we dequeue elements from the
+container. We decide to make it a subtype of the `BasicContainer`,
+because the statement "a first-in first-out container _is-a_ basic
+container" seems to make sense in our model. The first exercise will
+be to try and implement the storage semantics of the base container
+(i.e. get should remove the element) in the FIFO container, _without
+changing any implementation of the base container_ (that is, the stack
+in `Container<T>` *must* stay private). This will be painful and
+stupid, but remember we're just doing it to overbearingly make a
+point, and we'll be able to delete our implementation and do it
+properly soon.
+
+Once you've got that test passing, we're going to add two more types
+of containers that will extend from `BasicContainer`, a
+`WeightLimitedContainer`, that instead of taking an `int` for capacity
+will take a `decimal weightLimit`. The invariant for that class is
+just that the sum of contained elements should not exceed the weight
+limit. Again, try and implement it without changing any of the base
+classes (because we're trying to be good citizens and keep to the
+open/closed principle).
+
+The next container we want is a `HazardousMaterialsContainer`, which
+should inherit from `BasicContainer`, and it should weaken the
+precondition so that we can store two hazardous items next to one
+another. Quiz question: is it at all possible to implement this
+without altering any of the base classes, and with out affecting the
+visible semantics of `Container<Cargo>`?
+
+Finally, just to really ram home how stupid this inheritance model is
+for development, no matter how lucid "a weight-limited container is-a
+container seems", add a new container that is _both_ FIFO and
+weight-limited. Quiz question: what about the language makes our
+current solution not particularly reusable?
+
+Now that we've built our teetering inheritance tower, add a method to
+`Container<Cargo>` that is `IEnumerable<T> AddRange(IEnumerable<T> )`
+that adds as many elements from the input enumerable as it can,
+returning the remaining elements (if any) form the input. First just
+delegate to the `Add` method.
+
+Now, consider a well meaning developer decides that deferring to `Add`
+is lame when `Stack<T>` implements the enumerable interface, so we can
+just do `_contents = _contents.Append(args.Take(_capacity -
+_contents.Count));`. How much shit would this break in all the
+deriving classes?
+
+So now that we've decided that inheritance is hard to do properly,
+because you need to worry about what the preconditions and
+postconditions of every overridden method is, and we can effectively
+never modify a base class without potentially breaking all of it's
+deriving classes, lets consult the Gang of Four:
+
+> "Object composition is an alternative to class inheritance. Here, new
+> functionality is obtained by assembling or _composing_ objects to
+> get more complex functionality." §1.6, page 19
+
+Now, try deleting all the classes we have that derive from
+`Container<Cargo>` and re-implement the test cases we have so far, to
+produce all the containers we had (`BasicContainer`, `FifoContainer`,
+`WeightLimitedContainer`, `HazardousMaterialsContainer`,
+`FifoWeightLimitedContainer`) by using composition, i.e. the
+`BasicContainer` will have another container as a property that it
+_delegates_ to. We should be able to see how, by introducing an
+interface `IContainer`, we can implement the Composite design pattern
+to model this apparent hierarchy. Instead of having a compile time
+tree of classes, with method invocations resolved by a vtable lookup,
+we have a tree of objects, with method invocations resolved by
+delegation. In fact, some say [Delegation is
+Inheritance](http://c2.com/cgi/wiki?DelegationIsInheritance).
+
+Thats basically the moral for this one. If you're interested in some
+language history, inheritance vs. delegation in language design goes
+back to the roots of OO programming. Smalltalk was developed by Alan
+Kay and co. at Xerox PARC, and had a rich class metaphor (including
+some interesting features like meta-classes that we don't have in C#,
+but are comparable to e.g. eigenclasses in Ruby, or `type` class in
+Python). Around the same time the language Self was being developed by
+Dave Ungar and Randy Smith, and that used a prototype based model that
+emulated inheritance through delegation (I'd recommend [Self: The
+Power of
+Simplicity](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.394.747&rep=rep1&type=pdf)
+for a good intro). In Self you would invoke a method by sending the
+object a message, if the object couldn't respond to the message it
+would send the message to its _prototype_ object, which in turn would
+look up the method, or delegate it onwards. This method of delegation
+is strictly "more powerful", in the sense that any traditional
+inheritance model can by implemented via delegation.
+
+Interestingly, javascript uses the prototype model for delegating
+method calls, and Ext actually implements a class structure. So
+perhaps without knowing it you have actually been working with this
+delegation-as-inheritance model in your day to day work! For a more
+in-depth study of how you can implement an object model in javascript,
+I would recommend @raganwald's talk [The Art of the JavaScript
+Metaobject Protocol](http://vimeo.com/97415345) he gave at NDC last
+year. If you're further interested in first class object models, I
+would recommend looking into the common lisp object system, and
+reading the original The Art of the Metaobject Protocol by Kiczales et
+al. which dives into the CLOS implementation. Gerard has a copy you
+could probably borrow.
